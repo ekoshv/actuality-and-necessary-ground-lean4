@@ -1,0 +1,80 @@
+{"log":
+ [{"message":
+   ".> LEAN_PATH=././.lake/packages/Cli/.lake/build/lib/lean:././.lake/packages/batteries/.lake/build/lib/lean:././.lake/packages/Qq/.lake/build/lib/lean:././.lake/packages/aesop/.lake/build/lib/lean:././.lake/packages/proofwidgets/.lake/build/lib/lean:././.lake/packages/importGraph/.lake/build/lib/lean:././.lake/packages/LeanSearchClient/.lake/build/lib/lean:././.lake/packages/plausible/.lake/build/lib/lean:././.lake/packages/mathlib/.lake/build/lib/lean:././.lake/build/lib/lean /mnt/c/Users/ekosh/Documents/Codex/2026-10-18/referenced-chatgpt-conversation-this-is-an/work/elan/toolchains/leanprover--lean4---v4.19.0/bin/lean ././././ActualityGround.lean -R ./././. -o ././.lake/build/lib/lean/ActualityGround.olean -i ././.lake/build/lib/lean/ActualityGround.ilean -c ././.lake/build/ir/ActualityGround.c --json",
+   "level": "trace"},
+  {"message":
+   "././././ActualityGround.lean:380:0: 'ActualityGround.box_modus_ponens' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:381:0: 'ActualityGround.contingent_not_necessary' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:382:0: 'ActualityGround.modal_non_selection' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:383:0: 'ActualityGround.necessary_ground_cannot_necessitate_contingent_effect' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:384:0: 'ActualityGround.necessary_of_actual_noncontingent' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:385:0: 'ActualityGround.noncontingent_component_of_complete_ground' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:386:0: 'ActualityGround.noncontingent_ground_consequence' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:387:0: 'ActualityGround.necessary_ground_consequence' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:388:0: 'ActualityGround.refined_argument' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:389:0: 'ActualityGround.total_fact_actual' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:390:0: 'ActualityGround.total_fact_contingent' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:391:0: 'ActualityGround.represented_totality_necessary_ground' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:392:0: 'ActualityGround.Models.sometimes_contingent' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:393:0: 'ActualityGround.Models.sometimes_not_necessary' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:394:0: 'ActualityGround.Models.always_not_contingent' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:395:0: 'ActualityGround.Models.possibility_does_not_imply_actuality' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:396:0: 'ActualityGround.Models.dropping_contingency_allows_necessitation' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:397:0: 'ActualityGround.Models.groundExists_psr' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:398:0: 'ActualityGround.Models.dropping_P10_countermodel' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:399:0: 'ActualityGround.Models.dropping_PSR_countermodel' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:400:0: 'ActualityGround.Models.dropping_factivity_countermodel' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:401:0: 'ActualityGround.Models.joint_premises_satisfiable' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:402:0: 'ActualityGround.Models.extra_attribute_not_entailed' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:403:0: 'ActualityGround.Models.necessary_component_not_necessary_collection' does not depend on any axioms",
+   "level": "info"},
+  {"message":
+   "././././ActualityGround.lean:404:0: 'ActualityGround.Models.represented_totality_premises_satisfiable' does not depend on any axioms",
+   "level": "info"}],
+ "depHash": "7351478216963091946"}
