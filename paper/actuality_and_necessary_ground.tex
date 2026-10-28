@@ -1,0 +1,696 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage[colorlinks=true,
+            linkcolor={blue!50!black},
+            citecolor={blue!50!black},
+            urlcolor={blue!50!black},
+            pdftitle={From Mathematical Possibility to Actuality},
+            pdfauthor={A Philosophical Reconstruction},
+            pdfsubject={A Modal-Existential Argument for a Necessary Ground of Concrete Reality. Revised edition, 28 October 2026.},
+            pdfkeywords={actuality, contingency, necessary being, principle of sufficient reason, modal logic, Lean 4}]{hyperref}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{From Mathematical Possibility to Actuality}
+\fancyhead[R]{A Philosophical Reconstruction}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{14pt}
+\setlength{\emergencystretch}{1.5em}
+
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
+
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\newcommand{\Actual}{\mathsf{Actual}}
+\newcommand{\Possible}{\mathsf{Possible}}
+\newcommand{\grounds}{\blacktriangleright}
+\DeclareUrlCommand\lean{\urlstyle{tt}}
+
+\title{\textbf{From Mathematical Possibility to Actuality}\\[0.5em]
+  \large A Modal-Existential Argument for a Necessary Ground of Concrete Reality}
+\author{A Philosophical Reconstruction}
+\date{20 September 2026\\[0.3em]\normalsize Revised edition, 28 October 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This article develops a conditional metaphysical argument from the distinction between mathematical possibility and concrete actuality. The central claim is not that mathematics is incomplete in a way that directly proves God, nor that a mathematical description of a universe is defective. Rather, if the relevant mathematical truths are necessary while the actuality of a particular world is contingent, necessary mathematical truths alone cannot metaphysically necessitate that world's actuality without collapsing its contingency into necessity. A further explanatory principle -- a restricted Principle of Sufficient Reason (PSR) for contingent actuality -- then motivates a necessary ground of actuality. This revised edition strengthens that step. Two premises made explicit here, ultimacy and abstract insufficiency, yield a necessarily existing \emph{concrete} member of the complete ground of contingent actuality, which no mathematical truth can supply. Under the same premises it is a theorem that this ground explains without necessitating, so the modal-collapse objection becomes a precise statement of the argument's cost rather than a refutation. The resulting view is placed in dialogue with Avicenna's Necessary Existent, Leibniz's PSR, Heidegger's question of Being, Gödel's incompleteness results, the block-universe conception of time, mathematical Platonism, modal realism, and the Mathematical Universe Hypothesis. The argument is presented as a rigorous metaphysical reconstruction, not as an unconditional mathematical proof. Its inferences, together with models showing that its premises are jointly consistent and individually needed, have been verified in the Lean~4 proof assistant. Its decisive vulnerabilities are made explicit: the contingency of concrete reality, the explanatory PSR, the rejection of brute actuality, the ultimacy and abstract-insufficiency premises, and the further step from a necessary ground to the richer attributes traditionally associated with God.
+\end{abstract}
+
+\begin{center}
+\begin{minipage}{0.9\linewidth}
+\small\textbf{Note on this edition.} This edition revises the version of 20 September 2026. Section~\ref{sec:strengthened} is new: it identifies three weaknesses in the first edition's Proposition~\ref{prop:ground} and repairs them. Section~\ref{sec:formal}, also new, reports the machine-checked formalization. Sections~\ref{sec:modalcore}, \ref{sec:leibniz}, \ref{sec:objections}, \ref{sec:steps}, \ref{sec:scope}, and~\ref{sec:conclusion} have additions that refer to the new results. The first edition's argument is preserved in Sections~\ref{sec:modalcore}--\ref{sec:fromcore} and in the twelve steps of Section~\ref{sec:steps}.
+\end{minipage}
+\end{center}
+
+\tableofcontents
+
+\newpage
+
+\section{The Problem: Description Is Not Yet Actuality}
+
+A complete physical theory may describe a world in mathematical terms. One may even adopt the stronger thesis that a physical world \emph{is} a mathematical structure, as proposed in different forms by structural realists and, most explicitly, by Tegmark's Mathematical Universe Hypothesis~\cite{tegmark}. Yet a conceptual question remains:
+\begin{quote}
+What, if anything, distinguishes a mathematically possible structure from a concretely actual reality?
+\end{quote}
+
+This question should be separated from two other questions. First, it is not the question whether mathematical objects exist. Mathematical Platonism says that mathematical objects are abstract and mind-independent; on standard formulations they are also non-spatiotemporal and causally inert~\cite{linnebo,balaguer}. Second, it is not merely the cosmological question of what event preceded the earliest physical event. A four-dimensional block universe can have its entire temporal history represented as one tenseless spacetime structure, in which case asking for an earlier physical event may be misplaced~\cite{deng}.
+
+The question is instead ontological: why is there \emph{concrete actuality} at all, rather than only mathematical possibility or abstract structure?
+
+The proposal developed here is:
+
+\medskip
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{\textbf{Core Thesis.} Mathematical truths can specify or characterize possible structures. If concrete actuality is genuinely contingent, however, necessary mathematical truths alone cannot be a metaphysically sufficient, necessitating ground of that actuality. If contingent actuality has a sufficient ground, its complete ground cannot itself be merely contingent. This motivates a necessary ground of actuality.}}
+\medskip
+
+The phrase ``motivates'' is deliberate. The argument is conditional on substantive metaphysical premises, especially a restricted PSR. It is therefore stronger than a loose intuition but weaker than a theorem of pure logic.
+
+\section{Four Distinctions}
+
+\subsection{Mathematical existence and concrete existence}
+
+Let a mathematical structure be represented abstractly by
+\[
+  \mathcal{M} = \langle D, R_1, \ldots, R_n \rangle,
+\]
+where $D$ is a domain and the $R_i$ are relations, functions, or operations satisfying specified axioms. A Platonist may say that such structures exist independently of physical instantiation. A nominalist may reject this ontology while still accepting the truth or utility of mathematics. The present argument does not require full Platonism. It requires only a distinction between:
+\begin{enumerate}[label=(\roman*)]
+  \item the mathematical facts that characterize a possible structure, and
+  \item the fact that some concrete reality is actual.
+\end{enumerate}
+If that distinction is denied, one has already adopted a strong metaphysical position: something like mathematical monism, full-blooded Platonism, modal realism, or the Mathematical Universe Hypothesis. Such positions are addressed below rather than ruled out by definition.
+
+\subsection{Possibility and actuality}
+
+For a world-description $W$, write
+\[
+  \Possible(W)
+\]
+for the proposition that $W$ is metaphysically possible, and
+\[
+  \Actual(W)
+\]
+for the proposition that $W$ is concretely actual. The argument begins only if these can come apart:
+\[
+  \Possible(W) \not\Rightarrow \Actual(W).
+\]
+If every possible world is actual in the same sense, then the problem must be reformulated at the level of the total plenitude: why is the totality of worlds actual, or is ``actual'' merely indexical? David Lewis's modal realism is a prominent case in which possible worlds are treated as concrete worlds, though only one is ``actual'' relative to us~\cite{lewis}.
+
+\subsection{Contingency and necessity}
+
+Use the standard modal operators $\Box$ (necessarily) and $\Diamond$ (possibly). A proposition $p$ is contingent if
+\[
+  \Diamond p \land \Diamond \neg p.
+\]
+Thus the proposition that a particular concrete world $W$ is actual is contingent if
+\[
+  \Diamond \Actual(W) \land \Diamond \neg \Actual(W).
+\]
+The argument does not assume that every physical law, constant, or event is contingent. It needs only the contingency of the relevant total actuality.
+
+\subsection{Description, cause, explanation, and ground}
+
+These relations should not be conflated.
+\begin{itemize}
+  \item A description represents what something is like.
+  \item A cause is usually a relation among events, substances, or states.
+  \item An explanation answers an appropriate why-question.
+  \item A ground is a metaphysical dependence relation: one fact obtains in virtue of another~\cite{fine}.
+\end{itemize}
+The argument concerns grounding or ultimate explanation rather than a temporal cause ``before'' the universe. This matters especially if spacetime is a block: the sought ground need not be temporally earlier than the block.
+
+\section{The Modal Core: Why Necessary Mathematics Does Not Select a Contingent Actuality}
+\label{sec:modalcore}
+
+Let $N$ stand for the totality of mathematical facts relevant to the structure of a possible world $W$. Suppose these mathematical facts are necessary:
+\begin{equation}\label{eq:boxN}
+  \Box N.
+\end{equation}
+Suppose also that the concrete actuality of $W$ is contingent:
+\begin{equation}\label{eq:cont}
+  \Diamond \Actual(W) \land \Diamond \neg \Actual(W).
+\end{equation}
+What would it mean for mathematics \emph{alone} to be a necessitating sufficient ground of actuality? A strong formulation would require:
+\begin{equation}\label{eq:nec}
+  \Box\bigl(N \to \Actual(W)\bigr).
+\end{equation}
+But from \eqref{eq:boxN} and \eqref{eq:nec}, standard normal modal reasoning yields
+\[
+  \Box \Actual(W),
+\]
+contradicting the contingency condition in \eqref{eq:cont}.
+
+\begin{proposition}[Modal Non-Selection]\label{prop:nonselection}
+If the mathematical facts $N$ are necessary and the actuality of $W$ is contingent, then $N$ alone cannot be a metaphysically necessitating sufficient ground of $\Actual(W)$.
+\end{proposition}
+
+\begin{proof}
+Assume $\Box N$ and $\Box(N \to \Actual(W))$. By closure of necessity under modus ponens in normal modal logics, $\Box \Actual(W)$. But if $\Actual(W)$ is contingent, $\Diamond \neg \Actual(W)$. Hence the assumptions are inconsistent with contingency. Therefore, given contingency, necessary mathematical truths alone cannot necessitate the world's actuality.
+\end{proof}
+
+This proposition establishes less than ``mathematics cannot explain actuality'' in every possible sense. It establishes a precise point: if mathematical truths are necessary and world-actuality is contingent, mathematical necessity cannot by itself \emph{necessitate} that actuality. A non-necessitating statistical or contrastive explanation would require additional metaphysical work and would not by itself close the ultimate explanatory question.
+
+Nothing in the proof depends on $N$ being mathematical. Any necessary item whatever, including the necessary ground the argument eventually reaches, is subject to the same limit: it cannot necessitate a contingent actuality. This is where the modal-collapse objection takes hold (Section~\ref{obj:collapse}), and Section~\ref{sec:nonnec} shows what follows from it.
+
+\section{From the Modal Core to a Necessary Ground}
+\label{sec:fromcore}
+
+The modal core only opens an explanatory gap. To move from that gap to a necessary ground requires an additional principle.
+
+\subsection{A restricted Principle of Sufficient Reason}
+
+Leibniz's strong PSR is often summarized as the principle that no fact obtains without a sufficient reason why it is so rather than otherwise~\cite{leibniz,melamed}. Contemporary discussions distinguish stronger and weaker versions of PSR and debate whether unrestricted formulations generate modal-collapse problems~\cite{pruss,oppy06,reichenbach}.
+
+For present purposes we use a restricted form:
+
+\begin{definition}[PSR-A]
+Every contingent fact of concrete actuality has a sufficient metaphysical ground or complete explanation.
+\end{definition}
+
+PSR-A does not say that every truth whatsoever has a causal explanation, nor that necessary truths are caused. It targets contingent concrete actuality.
+
+\subsection{The total contingent fact}
+
+Let $C$ denote the total contingent fact: the conjunction or totality of all contingent facts of concrete actuality. We need not assume that $C$ is literally a set-theoretic conjunction; the notation is shorthand for the whole contingent domain whose actuality is at issue.
+
+By PSR-A, if $C$ is contingent, there is some complete ground $G$ such that
+\[
+  G \grounds C.
+\]
+
+Suppose $G$ were itself wholly contingent. Then $G$ would belong to, or be included within, the very totality of contingent reality represented by $C$. If $G$ is invoked as the complete explanation of $C$ while being only another dependent member of $C$, the explanation is not yet ultimate: the actuality of $G$ remains among the facts requiring grounding.
+
+This point does not depend on a temporal regress. An infinite chain of contingent explanations can be temporally beginningless and still leave a synchronic or global explanatory question: why does the whole contingent structure obtain? Avicenna and Leibniz both exploit versions of this distinction, though with different metaphysical frameworks~\cite{avicenna,adamson,chignell,leibniz}.
+
+\begin{proposition}[Necessary-Ground Consequence]\label{prop:ground}
+Assume (i) there is a total contingent actuality $C$, (ii) PSR-A is true, and (iii) no wholly contingent member or collection is a complete ground of the totality of contingent actuality. Then the complete ground of $C$ includes at least one non-contingent reality.
+\end{proposition}
+
+\begin{proof}
+By (i) and (ii), $C$ has a complete ground $G$. If $G$ were wholly contingent, then by (iii) it could not be the complete ground of $C$. Therefore $G$ is not wholly contingent. Hence the complete ground includes a non-contingent element or reality. In modal terms, the ultimate ground is necessary in at least the relevant ontological sense.\footnote{This last step needs two further premises: the members of an actual complete ground actually obtain, and the actual world is accessible from itself. Non-contingency alone also admits impossibility. Section~\ref{sec:concrete} states both premises explicitly.}
+\end{proof}
+
+The conclusion is intentionally modest:
+\begin{center}
+\fbox{There is a non-contingent ground of contingent actuality.}
+\end{center}
+It does not yet establish omniscience, perfect goodness, personhood, or any revealed theology.
+
+\section{Strengthening the Argument}
+\label{sec:strengthened}
+
+\subsection{Three weaknesses of Proposition~\ref{prop:ground}}
+\label{sec:weak}
+
+Proposition~\ref{prop:ground} is valid, but it is weaker than it looks, in three respects.
+
+First, premise (iii) excludes only grounds all of whose members are contingent. A collection of contingent facts together with a single necessary truth, for instance a mathematical truth, is not wholly contingent, so (iii) does not exclude it. If such a collection can be a complete ground, the conclusion of Proposition~\ref{prop:ground} is met with a mathematical truth as the ``non-contingent reality.'' That is the very thing the modal core was meant to rule out, so the conclusion does not yet reach a necessary ground ``beyond merely possible mathematical description.'' The formal development contains an explicit model of exactly this situation (Section~\ref{sec:formal}).
+
+Second, the rationale for (iii) is stronger than (iii) itself. A wholly contingent ground was excluded because its own actuality ``remains among the facts requiring grounding.'' That reason applies to each contingent member of a ground, not only to grounds made entirely of contingent members.
+
+Third, Proposition~\ref{prop:nonselection} applies to the necessary ground just as it applies to mathematics: a necessary ground cannot necessitate a contingent $C$. The first edition acknowledged this as a genuine additional burden (Section~\ref{obj:collapse}) but left it unresolved.
+
+\subsection{Ultimacy and abstract insufficiency}
+
+The strengthened argument replaces premise (iii) by a premise that follows its own rationale, and adds a premise that states the thesis the modal core only suggested.
+
+\begin{definition}[Ultimacy, P10*]\label{def:ultimacy}
+No member of a complete ground of the totality $C$ of contingent concrete actuality is itself contingent.
+\end{definition}
+
+Ultimacy constrains only grounds of the totality. It does not forbid explaining one contingent fact by another; ordinary science does that constantly. It says that the explanation of the whole contingent order cannot cite an item whose own actuality belongs to that order. This is the Avicennian and Leibnizian thought that the ground of the series lies outside the series, stated as a premise rather than presupposed.
+
+\begin{definition}[Abstract insufficiency, P3*]\label{def:ai}
+Every complete ground of the totality $C$ has a concrete member. No collection of abstract entities alone, mathematical structures included, completely grounds concrete actuality.
+\end{definition}
+
+Abstract insufficiency is the precise form of the claim that mathematics cannot create physical reality. It is stronger than the distinction P3 and must be kept apart from it. The Mathematical Universe Hypothesis denies P3: it identifies the physical world with a mathematical structure, so there is no further concrete actuality to ground. A view on which abstract structures exist apart from the physical world and give rise to it denies P3* instead. Both views are coherent; both are substantive.
+
+\subsection{A necessary concrete ground}
+\label{sec:concrete}
+
+Two further premises, both implicit in the first edition, are needed to pass from ``non-contingent'' to ``necessary.'' Non-contingency alone also admits impossibility, so the members of an actual complete ground must actually obtain (\emph{factivity}), and the actual world must be among the worlds accessible from itself (\emph{self-access}).
+
+\begin{proposition}[Necessary Concrete Ground]\label{prop:concrete}
+Assume that $C$ is actual and contingent, PSR-A, ultimacy, abstract insufficiency, factivity, and self-access. Then some complete ground of $C$ has a concrete member that actually and necessarily exists.
+\end{proposition}
+
+\begin{proof}
+By PSR-A, $C$ has a complete ground $G$. By abstract insufficiency, $G$ has a concrete member $g$. By ultimacy, $g$ is not contingent. By factivity, $g$ actually obtains. Suppose $g$ failed to obtain at some accessible world. Then, since $g$ obtains at the actual world and the actual world is accessible by self-access, $g$ would be both possible and possibly absent, that is, contingent. Hence $g$ obtains at every accessible world: it exists necessarily.
+\end{proof}
+
+Because $g$ is concrete, it cannot be a mathematical truth. The padded ground of Section~\ref{sec:weak} no longer meets the conclusion, and the phrase ``beyond merely possible mathematical description'' is earned rather than asserted.
+
+\subsection{Non-necessitation and the modal-collapse objection}
+\label{sec:nonnec}
+
+The necessary ground now faces Proposition~\ref{prop:nonselection} directly.
+
+\begin{proposition}[The Ground Leaves the Alternatives Open]\label{prop:open}
+Assume that $C$ is contingent, ultimacy, factivity, and self-access. Then for every complete ground $G$ of $C$ there is an accessible world at which $C$ fails while every member of $G$ still obtains.
+\end{proposition}
+
+\begin{proof}
+Since $C$ is contingent, there is an accessible world $v$ at which $C$ fails. Every member of $G$ is non-contingent by ultimacy and actual by factivity, hence necessary by the argument in the proof of Proposition~\ref{prop:concrete}. So every member of $G$ obtains at $v$.
+\end{proof}
+
+\begin{corollary}[Non-Necessitation]\label{cor:nonnec}
+Under the same assumptions, no complete ground $G$ of $C$ necessitates $C$:
+\[
+  \neg\Box(G \to C),
+\]
+where $G$ abbreviates the joint obtaining of its members.
+\end{corollary}
+
+\begin{proof}
+If $\Box(G \to C)$, then at the world $v$ of Proposition~\ref{prop:open}, where all of $G$ obtains, $C$ would hold, contrary to the choice of $v$.
+\end{proof}
+
+This turns the modal-collapse objection into a theorem about the shape of the conclusion. Van Inwagen's argument against the PSR assumes that an explanation entails what it explains~\cite{vaninwagen}. The total contingent fact would then be explained either by something necessary, which would make it necessary, or by something contingent, which would be circular. Corollary~\ref{cor:nonnec} accepts the first half of that reasoning and draws the opposite moral. Given contingency and ultimacy, an ultimate ground cannot necessitate what it grounds. Whoever insists that every genuine explanation necessitates must therefore reject PSR-A for the totality, or contingency; there is no third way out. Whoever keeps both is committed to an ultimate explanation that does not necessitate its explanandum and, by Proposition~\ref{prop:open}, does not by itself say why this world obtains rather than another.
+
+That commitment is the price of the argument, and it is now explicit. It is not obviously too high: libertarian free choices and objectively chancy outcomes are standard candidates for explanations that do not necessitate what they explain~\cite{pruss}. The argument does not choose between them.
+
+\subsection{Brute fact or necessary concrete reality}
+
+Ultimacy and abstract insufficiency also sharpen the alternative to the argument.
+
+\begin{proposition}[Brute Fact or Necessary Concretum]\label{prop:dilemma}
+Assume ultimacy and abstract insufficiency. Then either the totality $C$ has no complete ground, or some concrete reality is non-contingent.
+\end{proposition}
+
+\begin{proof}
+If $C$ has a complete ground, abstract insufficiency supplies a concrete member of it, and ultimacy makes that member non-contingent.
+\end{proof}
+
+\begin{corollary}[Mathematics Alone Cannot Ground Concrete Actuality]\label{cor:math}
+Assume ultimacy and abstract insufficiency. If every non-contingent reality is abstract, as it would be if the only necessary things were mathematical, then the totality of contingent concrete actuality has no complete ground.
+\end{corollary}
+
+The corollary states, under explicit premises, what the modal core only suggested: if nothing concrete exists necessarily, then contingent concrete reality is a brute fact, and mathematics cannot fill the gap.
+
+\subsection{Consistency and independence}
+\label{sec:consistency}
+
+A strengthened premise set is valuable only if it is consistent, and each new premise earns its place only if dropping it changes the conclusion. Both points have been checked with explicit two-world models (Section~\ref{sec:formal}):
+\begin{itemize}
+  \item All the premises of Propositions~\ref{prop:concrete}--\ref{prop:dilemma}, together with the necessity of mathematics, hold in a model in which $C$ is contingent. The strengthened premises therefore do not collapse modality. In that model, mathematics and a necessary concrete reality ground the world together.
+  \item Without abstract insufficiency, mathematics alone can ground the world.
+  \item Without ultimacy, contingent concrete reality can ground the world, and no complete ground has a necessary member.
+  \item Without PSR-A, the world is a brute contingent fact, while ultimacy, abstract insufficiency, and factivity hold vacuously.
+\end{itemize}
+The strengthened conclusion is neutral between theistic and naturalistic readings. A necessarily existing initial physical state whose later evolution is objectively chancy, as in Oppy's naturalism~\cite{oppy13}, satisfies it. Uniqueness, personhood, goodness, and identification with God are not established.
+
+\section{Avicenna: Necessary Existence and Contingent Being}
+
+Avicenna's metaphysics offers a particularly close historical analogue. In \emph{The Metaphysics of The Healing}, he distinguishes what is necessary in itself from what is possible (contingent) in itself. A contingent existent does not contain within its essence the sufficient explanation of its existence; if actual, its existence is from another. His argument aims ultimately at the Necessary Existent, whose existence is not received from another~\cite{avicenna,adamson,chignell}.
+
+Our reconstruction differs in emphasis. Instead of beginning with ordinary contingent substances, it begins with the gap between a mathematical specification and concrete actuality. But the structural movement is Avicennian:
+\[
+  \text{contingent actuality} \longrightarrow \text{ontological dependence} \longrightarrow \text{non-contingent ground}.
+\]
+
+An important caution follows. Avicenna's full system contains additional theses about essence and existence, causation, simplicity, unity, intellect, and emanation. The argument developed here should not be presented as if it simply reproduces Avicenna's demonstration. It is a contemporary modal reconstruction inspired by the same contingency/necessity architecture.
+
+\section{Leibniz: Why This Reality Rather Than Another?}
+\label{sec:leibniz}
+
+Leibniz sharpens the contrastive form of the question. Even if every event within an infinite world-series has an earlier explanation, one can still ask why that whole series exists and why this series obtains rather than another. His PSR is designed to prevent the explanatory chain from terminating in an unexplained contingent totality~\cite{leibniz,melamed}.
+
+In the present framework, the Leibnizian question becomes:
+\[
+  \text{Why } \Actual(W_1) \text{ rather than merely } \Possible(W_1),
+\]
+or, if many worlds are actual,
+\[
+  \text{Why this total actuality } \mathcal{A} \text{ rather than no concrete actuality?}
+\]
+
+Leibniz famously moves from possible worlds to divine understanding and will: understanding represents possibilities; will selects; power actualizes. Our argument does not build those attributes into the premises. It first seeks only the non-contingent ground. Whether selection among genuinely alternative possibilities implies something intellect-like or will-like is a further argument, treated in Section~\ref{obj:god}. Proposition~\ref{prop:open} shows why the question cannot be avoided: under ultimacy, no ground answers the contrastive question by itself, so any Leibnizian answer must appeal to something like selection.
+
+\section{Heidegger: The Question of Being as a Constraint on the Argument}
+
+Heidegger's importance here is partly negative. The opening question of \emph{Introduction to Metaphysics} asks why there are beings at all rather than nothing~\cite{heidegger}. Yet Heidegger resists the tendency of classical metaphysics to treat Being as merely another entity, even the supreme entity. His critique of onto-theology warns against turning the ultimate ground into simply ``the largest thing in the inventory of things.''
+
+A Heideggerian constraint on our argument can therefore be formulated as follows:
+\begin{quote}
+If a necessary ground is posited, it should not be conceived as one more contingent-like object located inside the world whose actuality it grounds.
+\end{quote}
+
+This does \emph{not} mean that Heidegger would endorse the Avicennian or Leibnizian conclusion. He would resist important parts of their metaphysical vocabulary. The synthesis proposed here is therefore constructive and tension-filled, not exegetical:
+\begin{align*}
+  \text{Avicenna} &: \quad \text{contingent being points to necessary existence,}\\
+  \text{Leibniz} &: \quad \text{contingent actuality calls for sufficient reason,}\\
+  \text{Heidegger} &: \quad \text{do not reduce the question of Being to another ordinary being.}
+\end{align*}
+The resulting proposal is to speak of a \emph{necessary ground of actuality} before speaking of a ``highest object.''
+
+\section{Gödel: Incompleteness Does Not Make a Mathematical Universe Impossible}
+
+Gödel's first incompleteness theorem shows, roughly, that any consistent, effectively axiomatized formal system sufficiently expressive for arithmetic contains true statements that are not provable within that system; the second theorem limits such a system's ability to establish its own consistency under appropriate conditions~\cite{goedel}.
+
+These theorems do not show that a complete mathematical structure cannot exist. They distinguish a structure from a formal proof system that attempts to capture all truths about it. Thus:
+\[
+  \text{structure} \neq \text{formal theory of the structure}.
+\]
+
+The natural numbers may be treated as a determinate structure even though no single suitable effective axiomatization captures every arithmetic truth, depending on one's semantics and meta-mathematical commitments. Consequently, Gödel does not refute the idea that a universe could be mathematical.
+
+What Gödel does contribute to our discussion is a warning against a stronger thesis: that ``mathematical reality'' must be identical with what can be exhaustively generated by one finite mechanical proof system. Even Tegmark's discussion of a mathematical universe explicitly confronts Gödelian issues and proposes restricting attention to computable/decidable structures as one response~\cite{tegmark}.
+
+Therefore the actuality argument should not be based on the invalid inference
+\[
+  \text{Gödel incompleteness} \Rightarrow \text{mathematical universe impossible}.
+\]
+Instead, its independent modal claim is:
+\[
+  \text{necessary mathematical truth} \not\Rightarrow \text{contingent concrete actuality},
+\]
+unless one gives up the contingency assumption or adopts a plenitude thesis.
+
+\section{The Four-Dimensional Block and Timeless Actualization}
+
+In a B-theoretic or block-universe conception, all times or events can be equally real, and the fundamental temporal description is tenseless~\cite{deng}. Represent a complete history schematically as
+\[
+  \mathcal{U} = \{S(t) : t \in T\},
+\]
+where $S(t)$ denotes the total physical state associated with temporal coordinate $t$.
+
+If the block is fundamental, it is misleading to imagine the universe ``actualizing itself'' slice by slice from an external time. The whole block is the candidate concrete object. The metaphysical question is therefore global:
+\begin{center}
+Why is $\mathcal{U}$ actual?
+\end{center}
+not merely
+\begin{center}
+What caused $S(t+1)$ from $S(t)$?
+\end{center}
+
+A necessary ground need not be temporally prior to the block. If timeless grounding is coherent, one may write schematically
+\[
+  G \grounds \mathcal{U}
+\]
+without positing a time $t = -1$ at which $G$ ``switches on'' spacetime.
+
+This model also dissolves an apparent conflict between a block universe and unpredictability. A future event can be part of a complete spacetime structure even if no observer at an earlier time can compute or infer it. Ontological determination, computational accessibility, epistemic predictability, and causal determinism are distinct notions. Quantum theory intensifies these distinctions but does not by itself decide the metaphysics of time.
+
+\section{Could Every Possible Universe Be Actualized?}
+
+Suppose there is a modal space
+\[
+  \mathfrak{P} = \{W_i : W_i \text{ is genuinely possible}\}.
+\]
+The grounding hypothesis leaves open several possibilities:
+\begin{enumerate}[label=(\alph*)]
+  \item exactly one world is actualized;
+  \item some proper subset of possible worlds is actualized;
+  \item every possible world is actualized;
+  \item ``actuality'' is indexical, as on Lewisian modal realism, rather than a privileged metaphysical property.
+\end{enumerate}
+
+If every coherent mathematical structure exists concretely, the original selection problem changes. There may be no question ``Why this world rather than another?'' at the global level. But a new question can remain:
+\begin{center}
+Why does the plenitude of structures have concrete existence at all?
+\end{center}
+
+A defender of plenitudinous mathematical realism may answer that mathematical existence just \emph{is} existence; no further actuality relation exists. That is a coherent escape from the argument, but it is not a neutral result. It is a substantive identity thesis:
+\[
+  \text{mathematical existence} = \text{concrete existence}.
+\]
+The burden then shifts to explaining why the ordinary abstract/concrete and causal/non-causal distinctions should be abandoned or reconstructed.
+
+\section{The Strongest Objections}
+\label{sec:objections}
+
+\subsection{Objection 1: Brute actuality}
+
+The simplest objection is to reject PSR-A:
+\begin{quote}
+The total concrete reality is a brute fact. It has no further explanation.
+\end{quote}
+
+This position is logically available. Contemporary discussions of brute facts explicitly connect them to denials or restrictions of PSR~\cite{mulligan}. Russell's famous stance in his debate with Copleston is often taken as a paradigmatic refusal to demand an explanation of the whole universe. Humean and anti-rationalist traditions likewise resist unrestricted explanatory demands.
+
+\paragraph{Reply.} The argument cannot derive a contradiction from brute actuality using pure logic alone. Its response must therefore be abductive or methodological: accepting brute actuality stops explanation exactly at the point where the most comprehensive contingent fact appears. A defender of PSR-A argues that this is theoretically costly, especially when we ordinarily seek explanations for contingent states precisely because they could have been otherwise. But this is a philosophical commitment, not a theorem. Proposition~\ref{prop:dilemma} states the alternative exactly: under ultimacy and abstract insufficiency, the options are a brute contingent totality and a necessarily existing concrete reality.
+
+\subsection{Objection 2: PSR causes modal collapse}
+\label{obj:collapse}
+
+Strong forms of PSR can threaten to make every truth necessary: if the necessary ground plus sufficient explanation necessitates every actual fact, how can contingency survive? Variants of this concern have been developed in contemporary metaphysics~\cite{mulligan,melamed}, most influentially by van Inwagen~\cite{vaninwagen}.
+
+\paragraph{Reply.} The present argument deliberately uses PSR-A rather than an unrestricted PSR. Even then, the problem is not automatically solved. If the necessary ground necessarily produces exactly $W$, then $W$ appears necessary. A theistic development therefore needs a coherent account of non-necessitated grounding -- traditionally, something like free creation -- or an account on which the ground is necessary while its contingent effects are not. The strengthened argument settles which it requires. Proposition~\ref{prop:open} and Corollary~\ref{cor:nonnec} show that, given contingency and ultimacy, no complete ground of the totality necessitates it. Modal collapse is therefore not a consequence of the strengthened premises, which have a model in which the world remains contingent (Section~\ref{sec:consistency}). What remains is a genuine commitment, stated in Section~\ref{sec:nonnec}: ultimate explanation is non-necessitating, and it does not by itself answer why this world rather than another.
+
+\subsection{Objection 3: The universe itself is necessary}
+
+One could deny \eqref{eq:cont} and claim
+\[
+  \Box \Actual(W).
+\]
+Then the modal non-selection argument does not apply.
+
+\paragraph{Reply.} This is coherent if defensible. But it requires showing that no genuinely alternative total reality is metaphysically possible. The mere fact that the universe has mathematical laws does not establish this necessity. The necessity thesis is therefore an alternative metaphysical endpoint rather than a refutation by itself.
+
+\subsection{Objection 4: Mathematical existence just is physical existence}
+
+Tegmark's strongest formulation identifies the physical world with an abstract mathematical structure~\cite{tegmark}. If the identity is literal, asking what ``adds actuality'' may be a category mistake.
+
+\paragraph{Reply.} The identity thesis avoids the gap by denying the distinction on which the argument starts. But it must then explain why some mathematical structures appear as causally efficacious, spatiotemporal, observer-containing worlds while abstract mathematics is usually characterized as causally inert. One can answer by revising the abstract/concrete distinction, but that is a major metaphysical commitment, not something established by mathematics alone. Two positions should be kept apart here. The identity thesis denies P3: there is no further concrete actuality to ground. A view on which abstract structures exist apart from the physical world and produce it denies abstract insufficiency instead. Each is a substantive thesis, not a consequence of mathematics.
+
+\subsection{Objection 5: Modal realism}
+
+Lewisian modal realism holds that possible worlds are concrete and equally real; ``actual'' functions indexically, much like ``here''~\cite{lewis}. This radically weakens the question why one possible world was selected for actuality.
+
+\paragraph{Reply.} It does not automatically answer why there is a plurality of concrete worlds at all. Lewis may treat the plurality as part of the best overall theory rather than as something requiring a further ground. The disagreement therefore returns to explanatory methodology and PSR.
+
+\subsection{Objection 6: A totality need not need a further explanation}
+
+The inference from ``each contingent member has an explanation'' to ``the totality has an explanation'' can commit a fallacy of composition.
+
+\paragraph{Reply.} The argument here does not infer the explanatory need of the whole merely from the explanatory need of each part. PSR-A is applied directly to the contingent total fact $C$. Whether that application is legitimate is exactly the disputed premise. Stating it explicitly prevents the fallacy from being hidden. The same holds for ultimacy. A view on which the totality is completely explained by its own members, through an infinite regress or a self-sustaining structure, denies ultimacy. It is consistent with PSR-A, abstract insufficiency, and factivity, and on it nothing necessary is required (Section~\ref{sec:consistency}).
+
+\subsection{Objection 7: The necessary ground need not be God}
+\label{obj:god}
+
+Even if a necessary ground exists, why identify it with God? It could be an impersonal necessary law, field, structure, or metaphysical principle.
+
+\paragraph{Reply.} This objection is decisive against any premature theological conclusion. The present argument establishes, at most, a necessary ground of contingent actuality. Additional arguments are required for unity, simplicity, causal power, intellect, will, goodness, or personhood. Avicenna and Leibniz each supply extensive further reasoning; contemporary authors such as Rasmussen and Pruss offer other routes to a necessary being~\cite{rasmussen,pruss}. None of those further attributes should be smuggled into the conclusion of the present argument. The strengthened conclusion is more specific, since the necessary reality is concrete, but it remains neutral on this question. A necessarily existing initial physical state whose later evolution is objectively chancy satisfies it, as on Oppy's naturalism~\cite{oppy13}. Abstract insufficiency excludes a merely mathematical ground; it does not exclude a physical one.
+
+\section{A Refined Argument in Twelve Steps}
+\label{sec:steps}
+
+The entire proposal can now be stated without rhetorical shortcuts.
+
+\begin{enumerate}[label=\textbf{P\arabic*.}, leftmargin=3.2em]
+  \item There are mathematical truths and structures capable of characterizing possible worlds.
+  \item At least the relevant pure mathematical truths are necessary rather than contingent.
+  \item Concrete actuality is conceptually distinguishable from mere mathematical possibility, unless one adopts a strong identity or plenitude thesis.
+  \item The actuality of the total concrete world is contingent: it could have failed to exist or could have been otherwise.
+  \item If necessary mathematical truths alone metaphysically necessitated that actuality, the actuality would itself be necessary.
+  \item Therefore necessary mathematical truths alone do not necessitate the contingent actuality of the world.
+  \item Every contingent fact of concrete actuality has a sufficient metaphysical ground or complete explanation (PSR-A).
+  \item Let $C$ be the total contingent actuality.
+  \item By P7, $C$ has a complete ground.
+  \item A ground composed wholly of contingent actuality cannot be the ultimate complete ground of the totality of contingent actuality, because its own actuality remains within the explanandum.
+  \item Therefore the complete ground of $C$ includes a non-contingent reality.
+  \item Hence, conditional on P3, P4, P7, and P10, there exists a necessary ground of contingent actuality beyond merely possible mathematical description.
+\end{enumerate}
+
+The inferential structure should be understood as conditional:
+\[
+  (P3 \land P4 \land P7 \land P10) \rightarrow \exists G\; \mathsf{NecessaryGround}(G, C).
+\]
+The argument's strength therefore depends primarily on four questions:
+\begin{enumerate}[label=(\roman*)]
+  \item Is the abstract/concrete distinction genuine?
+  \item Is total concrete actuality contingent?
+  \item Is PSR-A true?
+  \item Can a wholly contingent totality be completely grounded by contingent reality alone?
+\end{enumerate}
+These are the proper sites of philosophical disagreement.
+
+\subsection{The strengthened steps}
+
+Section~\ref{sec:strengthened} adds one premise, replaces P10, and draws a stronger conclusion. In the strengthened argument, the steps after P9 read:
+\begin{enumerate}[leftmargin=3.8em]
+  \item[\textbf{P3*.}] No collection of abstract entities alone, mathematical structures included, completely grounds concrete actuality.
+  \item[\textbf{P10*.}] No member of a complete ground of the totality of contingent actuality is itself contingent.
+  \item[\textbf{P11*.}] Therefore the complete ground of $C$ has a member that is concrete, by P3*, and non-contingent, by P10*.
+  \item[\textbf{P12*.}] Hence, given that the members of an actual ground obtain and that the actual world is accessible from itself, there exists a necessarily existing concrete ground of contingent actuality. It grounds $C$ without necessitating it, and it does not by itself explain why $C$ obtains rather than another totality.
+\end{enumerate}
+With $F$ for factivity and self-access, the strengthened conditional is
+\[
+  (P3^{*} \land P4 \land P7 \land P10^{*} \land F) \rightarrow
+  \exists G\; \exists g \in G\;\bigl(G \grounds C \land \mathsf{Concrete}(g) \land \Box\,\mathsf{Exists}(g) \land \neg\Box(G \to C)\bigr).
+\]
+The sites of disagreement are now the distinction P3 and its strengthening P3*, contingency, PSR-A, and ultimacy. The acceptance of a non-necessitating ultimate explanation is not a further optional premise: by Corollary~\ref{cor:nonnec}, it follows from contingency, PSR-A, ultimacy, and $F$.
+
+\section{What the Argument Does and Does Not Establish}
+\label{sec:scope}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}p{0.46\linewidth}p{0.46\linewidth}@{}}
+\toprule
+\textbf{It supports, conditionally} & \textbf{It does not by itself prove} \\
+\midrule
+A distinction between mathematical possibility and contingent actuality & That mathematical Platonism is true \\
+That necessary mathematical truths cannot alone necessitate contingent actuality & That the universe had a temporal beginning \\
+A necessary ground if PSR-A and the anti-circularity premise are accepted & That Gödel's theorem proves God \\
+A timeless grounding model compatible with a block universe & That quantum mechanics is false or deterministic \\
+A natural bridge to Avicennian and Leibnizian contingency arguments & That the necessary ground is personal, omniscient, or morally perfect \\
+A Heideggerian warning against conceiving the ground as merely another intraworldly object & That Heidegger himself endorsed classical theism \\
+A necessarily existing concrete ground, if ultimacy and abstract insufficiency are also accepted & That this ground is unique, or that it is not physical \\
+That such a ground explains contingent actuality without necessitating it & Why this world obtains rather than another \\
+A sharp dilemma between a brute contingent totality and a necessary concrete reality & That PSR-A is true, and so which side of the dilemma holds \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Formal Verification}
+\label{sec:formal}
+
+The inferences of Sections~\ref{sec:modalcore}--\ref{sec:strengthened} have been checked in the Lean~4 proof assistant~\cite{lean4} with the mathlib library~\cite{mathlib}. The development, its audit, and the record of the verification run are available at \url{https://github.com/ekoshv/actuality-and-necessary-ground-lean4}.
+
+\paragraph{Modelling.} Propositions are functions from evaluations to propositions, and necessity and possibility are interpreted over an arbitrary accessibility relation; Proposition~\ref{prop:nonselection} needs no S5 assumption. Candidate grounds form a separate domain, a ground is a set of candidates and may be infinite, and the grounding relation is left uninterpreted. Every philosophical premise, including PSR-A, premise (iii), ultimacy, abstract insufficiency, factivity, and self-access, enters as a hypothesis of the theorems, never as an axiom. The formal theorems therefore verify conditional implications; they do not prove the premises.
+
+\paragraph{Results.} Table~\ref{tab:lean} lists the Lean theorem that verifies each main result.
+
+\begin{table}[tbp]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}p{0.44\linewidth}p{0.5\linewidth}@{}}
+\toprule
+\textbf{Result} & \textbf{Lean theorem} \\
+\midrule
+Proposition~\ref{prop:nonselection} & \lean{modal_non_selection} \\
+Proposition~\ref{prop:ground} & \lean{noncontingent_ground_consequence} \\
+Proposition~\ref{prop:ground} with factivity and self-access & \lean{necessary_ground_consequence} \\
+Premise (iii) met by contingent reality padded with mathematics & \lean{Models.original_P10_met_by_mathematics} \\
+Proposition~\ref{prop:concrete} & \lean{necessary_concrete_ground} \\
+Proposition~\ref{prop:open} & \lean{ground_obtains_where_C_fails} \\
+Corollary~\ref{cor:nonnec} & \lean{ground_does_not_necessitate} \\
+Proposition~\ref{prop:dilemma} & \lean{brute_fact_or_noncontingent_concretum} \\
+Corollary~\ref{cor:math} & \lean{abstract_necessity_alone_cannot_ground} \\
+Joint model of the strengthened premises & \lean{Models.strengthened_premises_satisfiable} \\
+Countermodel without P3* & \lean{Models.dropping_AI_countermodel} \\
+Countermodel without P10* & \lean{Models.dropping_strong_nc_countermodel} \\
+Countermodel without PSR-A & \lean{Models.dropping_PSR_strong_countermodel} \\
+\bottomrule
+\end{tabular}
+\caption{Main results and the Lean theorems that verify them.}
+\label{tab:lean}
+\end{table}
+
+\paragraph{Foundations.} A separate audit inspects all 39 theorems of the development. Twenty-eight depend on no axioms, and eleven use only Lean's standard \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}. There are no added axioms and no admitted proofs. The verification run of 28 October 2026 used Lean 4.19.0 and mathlib at commit \lean{c44e0c8} (tag \lean{v4.19.0}); the repository records the exact compiler identity and the hashes of all sources, including the first edition of this article.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The most defensible version of the argument is not ``mathematics is incomplete, therefore God,'' nor ``an LLM is mathematical, therefore immaterial beings exist.'' Those moves are too quick. The stronger route begins with a modal distinction.
+
+If the mathematical truths characterizing a possible world are necessary, while that world's concrete actuality is contingent, mathematics alone cannot be a necessitating sufficient ground of its actuality without converting contingency into necessity. This yields a precise explanatory gap between \emph{what can be mathematically specified} and \emph{what is concretely actual}.
+
+A restricted Principle of Sufficient Reason then turns that gap into a contingency argument: if the total contingent actuality has a complete ground, and no wholly contingent item or collection can completely ground the whole contingent domain, then the ultimate ground must be non-contingent. In that limited but significant sense, a necessary ground of actuality follows.
+
+The strengthened argument makes that sense precise. If no member of the ground of the contingent totality may itself be contingent, and abstract entities alone cannot ground concrete actuality, then the ground includes a necessarily existing concrete reality, which no mathematical truth can be. The same premises prove that this reality grounds the world without necessitating it. Van Inwagen's dilemma is thereby converted from a refutation into the argument's stated cost: the ultimate explanation of a contingent world cannot be necessitating, and it cannot by itself say why this world exists rather than another.
+
+Avicenna supplies the metaphysics of necessary versus contingent existence. Leibniz supplies the demand for a sufficient reason of the total contingent order. Heidegger supplies a caution: the ultimate issue is not adequately captured by picturing a supreme object alongside other objects. Gödel supplies a different caution: mathematical structure is not identical with exhaustive derivability inside one formal system. The block-universe picture then allows the grounding relation to be timeless rather than a first event before time.
+
+The remaining philosophical choice is sharp but unresolved. One may reject the argument by accepting brute actuality, by declaring the whole concrete reality necessary, by identifying mathematical and concrete existence, by adopting a plenitude of concrete worlds, by letting the contingent totality ground itself, or by holding that abstract structures give rise to concrete reality. Or one may accept that contingent actuality has a necessarily existing concrete ground that explains it without necessitating it. The argument does not force that choice by logic alone. What it does is expose exactly where the choice occurs and what each alternative must bear.
+
+The central question can therefore be stated in its most compact form:
+\begin{center}
+\fbox{If possibility does not actualize itself, what grounds the fact that anything is actual?}
+\end{center}
+
+\clearpage
+\begin{thebibliography}{99}
+
+\bibitem{adamson}
+Adamson, Peter. ``From the Necessary Existent to God.'' In \emph{Interpreting Avicenna: Critical Essays}, edited by Peter Adamson, 170--189. Cambridge: Cambridge University Press, 2013. \url{https://doi.org/10.1017/CBO9781139047890.010}.
+
+\bibitem{avicenna}
+Avicenna (Ibn S\={\i}n\={a}). \emph{The Metaphysics of The Healing: A Parallel English-Arabic Text}. Translated, introduced, and annotated by Michael E. Marmura. Provo, UT: Brigham Young University Press, 2005.
+
+\bibitem{balaguer}
+Balaguer, Mark. ``Platonism in Metaphysics.'' In \emph{The Stanford Encyclopedia of Philosophy}, Summer 2026 edition, edited by Edward N. Zalta and Uri Nodelman. Metaphysics Research Lab, Stanford University. \url{https://plato.stanford.edu/archives/sum2026/entries/platonism/}.
+
+\bibitem{deng}
+Deng, Natalja. ``Eternity in Christian Thought.'' In \emph{The Stanford Encyclopedia of Philosophy}, Spring 2025 edition, edited by Edward N. Zalta and Uri Nodelman. Metaphysics Research Lab, Stanford University. \url{https://plato.stanford.edu/archives/spr2025/entries/eternity/}.
+
+\bibitem{mulligan}
+Mulligan, Kevin, and Fabrice Correia. ``Facts.'' In \emph{The Stanford Encyclopedia of Philosophy}, Spring 2026 edition, edited by Edward N. Zalta and Uri Nodelman. Metaphysics Research Lab, Stanford University. \url{https://plato.stanford.edu/archives/spr2026/entries/facts/}.
+
+\bibitem{fine}
+Fine, Kit. ``Guide to Ground.'' In \emph{Metaphysical Grounding: Understanding the Structure of Reality}, edited by Fabrice Correia and Benjamin Schnieder, 37--80. Cambridge: Cambridge University Press, 2012. \url{https://doi.org/10.1017/CBO9781139149136.002}.
+
+\bibitem{goedel}
+Gödel, Kurt. ``Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I.'' \emph{Monatshefte für Mathematik und Physik} 38 (1931): 173--198. \url{https://doi.org/10.1007/BF01700692}.
+
+\bibitem{heidegger}
+Heidegger, Martin. \emph{Introduction to Metaphysics}. 2nd ed. Translated by Gregory Fried and Richard Polt. New Haven: Yale University Press, 2014.
+
+\bibitem{leibniz}
+Leibniz, G. W. ``The Monadology'' (1714), especially \S\S31--38. In Roger Ariew and Daniel Garber, trans.\ and eds., \emph{Philosophical Essays}. Indianapolis: Hackett, 1989.
+
+\bibitem{lewis}
+Lewis, David K. \emph{On the Plurality of Worlds}. Oxford: Basil Blackwell, 1986.
+
+\bibitem{linnebo}
+Linnebo, Øystein. ``Platonism in the Philosophy of Mathematics.'' In \emph{The Stanford Encyclopedia of Philosophy}, Summer 2024 edition, edited by Edward N. Zalta and Uri Nodelman. Metaphysics Research Lab, Stanford University. \url{https://plato.stanford.edu/archives/sum2024/entries/platonism-mathematics/}.
+
+\bibitem{melamed}
+Melamed, Yitzhak Y., and Martin Lin. ``Principle of Sufficient Reason.'' In \emph{The Stanford Encyclopedia of Philosophy}, Summer 2023 edition, edited by Edward N. Zalta and Uri Nodelman. Metaphysics Research Lab, Stanford University. \url{https://plato.stanford.edu/archives/sum2023/entries/sufficient-reason/}.
+
+\bibitem{oppy06}
+Oppy, Graham. \emph{Arguing about Gods}. Cambridge: Cambridge University Press, 2006. \url{https://doi.org/10.1017/CBO9780511498978}.
+
+\bibitem{pruss}
+Pruss, Alexander R. \emph{The Principle of Sufficient Reason: A Reassessment}. Cambridge Studies in Philosophy. Cambridge: Cambridge University Press, 2006. \url{https://doi.org/10.1017/CBO9780511498992}.
+
+\bibitem{rasmussen}
+Rasmussen, Joshua L. ``A New Argument for a Necessary Being.'' \emph{Australasian Journal of Philosophy} 89, no.~2 (2011): 351--356. \url{https://doi.org/10.1080/00048402.2010.523706}.
+
+\bibitem{reichenbach}
+Reichenbach, Bruce. ``Cosmological Argument.'' In \emph{The Stanford Encyclopedia of Philosophy}, Summer 2024 edition, edited by Edward N. Zalta and Uri Nodelman. Metaphysics Research Lab, Stanford University. \url{https://plato.stanford.edu/archives/sum2024/entries/cosmological-argument/}.
+
+\bibitem{chignell}
+Chignell, Andrew, and Derk Pereboom. ``Natural Theology and Natural Religion.'' In \emph{The Stanford Encyclopedia of Philosophy}, Spring 2025 edition, edited by Edward N. Zalta and Uri Nodelman. Metaphysics Research Lab, Stanford University. \url{https://plato.stanford.edu/archives/spr2025/entries/natural-theology/}.
+
+\bibitem{tegmark}
+Tegmark, Max. ``The Mathematical Universe.'' \emph{Foundations of Physics} 38, no.~2 (2008): 101--150. \url{https://doi.org/10.1007/s10701-007-9186-9}.
+
+\bibitem{vaninwagen}
+van Inwagen, Peter. \emph{An Essay on Free Will}. Oxford: Clarendon Press, 1983. See especially pp.~202--204.
+
+\bibitem{oppy13}
+Oppy, Graham. ``Ultimate Naturalistic Causal Explanations.'' In \emph{The Puzzle of Existence: Why Is There Something Rather Than Nothing?}, edited by Tyron Goldschmidt, 46--63. New York: Routledge, 2013.
+
+\bibitem{lean4}
+de Moura, Leonardo, and Sebastian Ullrich. ``The Lean 4 Theorem Prover and Programming Language.'' In \emph{Automated Deduction -- CADE 28}, edited by André Platzer and Geoff Sutcliffe, 625--635. Lecture Notes in Computer Science 12699. Cham: Springer, 2021. \url{https://doi.org/10.1007/978-3-030-79876-5_37}.
+
+\bibitem{mathlib}
+The mathlib Community. ``The Lean Mathematical Library.'' In \emph{Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020)}, 367--381. New York: Association for Computing Machinery, 2020. \url{https://doi.org/10.1145/3372885.3373824}.
+
+\end{thebibliography}
+
+\end{document}

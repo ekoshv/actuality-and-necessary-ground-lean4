@@ -2,11 +2,11 @@
 
 <p align="center">
   <em>A modal-existential argument for a necessary ground of concrete reality</em><br>
-  A Philosophical Reconstruction · 20 September 2026
+  A Philosophical Reconstruction · revised edition, 28 October 2026
 </p>
 
 <p align="center">
-  <a href="source/actuality_and_necessary_ground.pdf"><strong>Read the paper</strong></a>
+  <a href="actuality_and_necessary_ground.pdf"><strong>Read the paper</strong></a>
   &nbsp;·&nbsp;
   <a href="ActualityGround.lean"><strong>Lean 4 development</strong></a>
   &nbsp;·&nbsp;
@@ -223,9 +223,9 @@ The tags (i) to (iv) match the questions in the chart. Where the Lean developmen
 
 ## The strengthened argument
 
-The paper's argument has three gaps. P10 forbids only grounds whose members are all contingent, so contingent reality padded with a mathematical truth satisfies it, and the conclusion is then met by mathematics itself (`Models.original_P10_met_by_mathematics`). Nothing shows the ground lies "beyond merely possible mathematical description." And Proposition 1 implies that a necessary ground cannot necessitate a contingent world, which is van Inwagen's modal-collapse objection; the paper leaves it as "a genuine additional burden."
+The paper's first edition had three gaps. P10 forbids only grounds whose members are all contingent, so contingent reality padded with a mathematical truth satisfies it, and the conclusion is then met by mathematics itself (`Models.original_P10_met_by_mathematics`). Nothing showed the ground lies "beyond merely possible mathematical description." And Proposition 1 implies that a necessary ground cannot necessitate a contingent world, which is van Inwagen's modal-collapse objection; the first edition left it as "a genuine additional burden."
 
-The strengthened version adds two premises that are not in the paper, and proves what they buy and what they cost.
+The [revised edition](actuality_and_necessary_ground.pdf) adds two premises in its Section 5, and the Lean development proves what they buy and what they cost.
 
 - **P10\*, ultimacy.** No member of a complete ground of the contingent totality is itself contingent. This is P10's own rationale, that a contingent ground's "own actuality remains within what was to be explained," applied to every member instead of the whole collection. It constrains only the ground of the totality; single contingent facts can still be explained by other contingent facts.
 - **P3\*, abstract insufficiency.** Every complete ground of concrete actuality has a concrete member. Abstract entities, including all of mathematics, cannot ground it on their own. This is the claim in the spoken essay's title, stated as a premise.
@@ -270,7 +270,8 @@ Accepting all the premises commits you to an ultimate explanation that is non-co
 ```mermaid
 flowchart LR
     Reader([Reader]) -->|"watch · listen"| Media[("media/<br/>film · essay")]
-    Reader -->|read| Paper["source/<br/>the paper"]
+    Reader -->|read| Paper["the paper<br/>revised edition"]
+    Orig[("source/<br/>first edition")] -->|"revised as"| Paper
     Paper -->|"formal targets"| Lean{{"ActualityGround.lean<br/>39 theorems"}}
     Lean --> Check["check.sh<br/>type-check<br/>build · audit"]
     Pins[("lean-toolchain<br/>lakefile.toml<br/>lake-manifest.json")] -->|pinned| Check
@@ -281,8 +282,10 @@ flowchart LR
 
 | Component | Role |
 |---|---|
-| [`source/actuality_and_necessary_ground.pdf`](source/actuality_and_necessary_ground.pdf) | The paper, unchanged |
-| [`source/article_extracted.txt`](source/article_extracted.txt) | Page-labelled text extraction of the paper |
+| [`actuality_and_necessary_ground.pdf`](actuality_and_necessary_ground.pdf) | The paper, revised edition of 28 October 2026 |
+| [`paper/actuality_and_necessary_ground.tex`](paper/actuality_and_necessary_ground.tex) | LaTeX source of the revised edition |
+| [`source/actuality_and_necessary_ground.pdf`](source/actuality_and_necessary_ground.pdf) | The first edition of 20 September 2026, unchanged; every verification run records its hash |
+| [`source/article_extracted.txt`](source/article_extracted.txt) | Page-labelled text extraction of the first edition |
 | [`ActualityGround.lean`](ActualityGround.lean) | The modal model, the 39 theorems, the models and countermodels, and the strengthened argument |
 | [`Audit.lean`](Audit.lean) | Transitive axiom audit of every theorem |
 | [`check.sh`](check.sh) | One command: type-check, build, audit |
@@ -383,6 +386,13 @@ flowchart TD
 | 1 · type-check | `lake env lean -DwarningAsError=true ActualityGround.lean` | any error or warning |
 | 2 · build | `lake build` | the build fails |
 | 3 · axiom audit | `lake env lean -DwarningAsError=true Audit.lean` | the project declares an axiom, a theorem depends on an axiom other than `propext`, `Classical.choice`, or `Quot.sound`, or fewer than 39 theorems are found |
+
+The paper is built from [`paper/actuality_and_necessary_ground.tex`](paper/actuality_and_necessary_ground.tex) with pdflatex. Run the second command three times so the contents and cross-references settle:
+
+```sh
+mkdir -p build
+pdflatex -output-directory=build paper/actuality_and_necessary_ground.tex
+```
 
 ---
 

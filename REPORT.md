@@ -1,6 +1,6 @@
 # Formalization report
 
-**Article:** *From Mathematical Possibility to Actuality: A Modal-Existential Argument for a Necessary Ground of Concrete Reality*, “A Philosophical Reconstruction,” 20 September 2026. The original 16-page PDF was found on the user's Desktop, read completely by page-labelled text extraction, and its two principal propositions were also inspected as rendered pages. An unchanged copy is included in `source/`; its SHA-256 is `5e13210df5408b365746785757aa8494b53e96e4887115f16470f7445f06a0ea`.
+**Article:** *From Mathematical Possibility to Actuality: A Modal-Existential Argument for a Necessary Ground of Concrete Reality*, “A Philosophical Reconstruction,” 20 September 2026. The original 16-page PDF was found on the user's Desktop, read completely by page-labelled text extraction, and its two principal propositions were also inspected as rendered pages. An unchanged copy is included in `source/`; its SHA-256 is `5e13210df5408b365746785757aa8494b53e96e4887115f16470f7445f06a0ea`. A revised edition of 28 October 2026, which presents the strengthened argument in its Section 5 and reports this formalization in its Section 15, is `actuality_and_necessary_ground.pdf` in the repository root; its LaTeX source is `paper/actuality_and_necessary_ground.tex`. Throughout this report, "the article" means the first edition.
 
 **Verified on 28 October 2026:** direct Lean type-check, Lake build, and the separate dependency audit all exited **0**. All **39 theorems** passed. Twenty-eight have no axiom dependencies; eleven use only Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. There are no added axioms or admitted proofs. The exact Lean 4.19.0 compiler, mathlib revision, and source hashes are recorded in `compilation_output.txt`. The first 25 theorems formalize the article; the other 14 form the strengthened argument described below. The 25 article theorems were first verified on 18 October 2026.
 
@@ -42,9 +42,9 @@ For the necessity bridge, `R w w` explicitly supplies accessibility of the actua
 
 Under the article's premises, the necessary component is not proved unique, personal, good, omniscient, nonmathematical, or identifiable with God. The strengthened argument below adds P3\*, under which it is concrete; the other attributes remain unproved. Gödel's incompleteness theorems, quantum physics, and the historical interpretations in sections 5–11 are contextual discussion and are not proved in this development.
 
-## Strengthened argument (beyond the article)
+## Strengthened argument (revised edition)
 
-P10 excludes only grounds all of whose members are contingent. `Models.original_P10_met_by_mathematics` shows the consequence. Contingent concrete reality padded with a mathematical candidate satisfies PSR, P10, and factivity. The formal conclusion is then met with the mathematical candidate as the necessarily obtaining member, and no complete ground has a necessary concrete member. The article's rationale for P10 applies to each contingent member, not only to wholly contingent collections. Its claim that the ground lies "beyond merely possible mathematical description" needs a premise the article never states.
+This section goes beyond the article; the revised edition presents it in its Section 5. P10 excludes only grounds all of whose members are contingent. `Models.original_P10_met_by_mathematics` shows the consequence. Contingent concrete reality padded with a mathematical candidate satisfies PSR, P10, and factivity. The formal conclusion is then met with the mathematical candidate as the necessarily obtaining member, and no complete ground has a necessary concrete member. The article's rationale for P10 applies to each contingent member, not only to wholly contingent collections. Its claim that the ground lies "beyond merely possible mathematical description" needs a premise the article never states.
 
 Two premises close these gaps. Both are theorem arguments, not axioms.
 
