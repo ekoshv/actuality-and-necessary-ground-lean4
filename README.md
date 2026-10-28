@@ -11,10 +11,12 @@
   <a href="ActualityGround.lean"><strong>Lean 4 development</strong></a>
   &nbsp;·&nbsp;
   <a href="REPORT.md"><strong>Verification report</strong></a>
+  &nbsp;·&nbsp;
+  <a href="#the-strengthened-argument"><strong>Strengthened argument</strong></a>
 </p>
 
 <p align="center">
-  Lean 4.19.0 &nbsp;·&nbsp; 25 theorems &nbsp;·&nbsp; no added axioms &nbsp;·&nbsp; conditional throughout
+  Lean 4.19.0 &nbsp;·&nbsp; 39 theorems &nbsp;·&nbsp; no added axioms &nbsp;·&nbsp; conditional throughout
 </p>
 
 ---
@@ -219,13 +221,57 @@ The tags (i) to (iv) match the questions in the chart. Where the Lean developmen
 - **Contingent grounds suffice (iv).** Reject P10. A wholly contingent ground may completely ground the total, so PSR and factivity hold with no necessary member. P10 is a strong substantive premise, not something deduced from the word “ground.” Lean: `dropping_P10_countermodel`.
 - **A non-contingent ground.** Accept P3, P4, P7, and P10. What follows is a necessary component of a complete ground of contingent actuality. Unity, simplicity, intellect, will, goodness, and personhood each require a further argument. Lean: `necessary_ground_consequence`, and `joint_premises_satisfiable` shows that the premises have a model.
 
+## The strengthened argument
+
+The paper's argument has three gaps. P10 forbids only grounds whose members are all contingent, so contingent reality padded with a mathematical truth satisfies it, and the conclusion is then met by mathematics itself (`Models.original_P10_met_by_mathematics`). Nothing shows the ground lies "beyond merely possible mathematical description." And Proposition 1 implies that a necessary ground cannot necessitate a contingent world, which is van Inwagen's modal-collapse objection; the paper leaves it as "a genuine additional burden."
+
+The strengthened version adds two premises that are not in the paper, and proves what they buy and what they cost.
+
+- **P10\*, ultimacy.** No member of a complete ground of the contingent totality is itself contingent. This is P10's own rationale, that a contingent ground's "own actuality remains within what was to be explained," applied to every member instead of the whole collection. It constrains only the ground of the totality; single contingent facts can still be explained by other contingent facts.
+- **P3\*, abstract insufficiency.** Every complete ground of concrete actuality has a concrete member. Abstract entities, including all of mathematics, cannot ground it on their own. This is the claim in the spoken essay's title, stated as a premise.
+
+```mermaid
+flowchart TD
+    Start(["P10* · ultimacy<br/>P3* · abstract insufficiency"]) --> Q{"does C have a<br/>complete ground?"}
+    Q -->|"no · PSR-A rejected"| Brute(["brute fact"])
+    Q -->|"yes · PSR-A"| K["a member of the ground is<br/>concrete by P3* and<br/>non-contingent by P10*"]
+    K -->|"+ factivity · self-access"| Concl{{"P12* · a necessarily existing<br/>concrete member of a<br/>complete ground of C"}}
+    Concl -->|"+ P4 · C contingent"| NN["the ground still obtains<br/>where C fails"]
+    NN --> NoNec(["it grounds C without<br/>necessitating it"])
+```
+
+| Result | Theorem | What it shows |
+|---|---|---|
+| The loophole closed | `strengthened_premises_imply_P10` | P10\* and P3\* imply P10, so every earlier theorem still applies. |
+| P12\* | `necessary_concrete_ground` | Some complete ground of $C$ has a concrete member that actually and necessarily exists. A mathematical truth cannot be the witness. |
+| Brute fact or necessary concretum | `brute_fact_or_noncontingent_concretum` | Under P10\* and P3\*, either $C$ has no complete ground, or some concrete reality is non-contingent. |
+| Mathematics cannot ground reality | `abstract_necessity_alone_cannot_ground` | If the only non-contingent things are abstract, $C$ has no complete ground at all. |
+| A non-contrastive ground | `ground_obtains_where_C_fails` | Every complete ground of a contingent $C$ still obtains in some accessible world where $C$ fails. |
+| No modal collapse | `ground_does_not_necessitate` | No complete ground necessitates $C$. Van Inwagen's dilemma becomes a theorem about how the ground explains. |
+| All together | `strengthened_argument` | Modal non-selection, P12\*, and non-necessitation hold under one set of premises. |
+
+The premises are consistent with a contingent world: `Models.strengthened_premises_satisfiable` gives a model in which mathematics and a necessary concrete reality ground the world together. Each new premise is needed. Without P3\*, mathematics alone can ground the world (`Models.dropping_AI_countermodel`). Without P10\*, contingent reality can ground itself and nothing necessary is required (`Models.dropping_strong_nc_countermodel`). Without PSR-A, the world is a brute fact (`Models.dropping_PSR_strong_countermodel`).
+
+What remains is a choice of premises, each with a named cost:
+
+| Exit | Denies | Cost |
+|---|---|---|
+| Necessitarianism | P4 | Nothing could have been otherwise. |
+| Brute fact | PSR-A for the totality | Explanation stops at the largest contingent fact. |
+| Self-grounding totality | P10\* | The whole is explained by its own members. |
+| Abstract grounding | P3\* | Mathematics or other abstracta produce concrete reality. |
+| Identity or plenitude | P3 | The abstract/concrete distinction is given up. |
+| Only necessitating explanation counts | PSR-A or P4 | By `ground_does_not_necessitate`, this is van Inwagen's route, not a fifth option. |
+
+Accepting all the premises commits you to an ultimate explanation that is non-contrastive and non-necessitating, as with free choice or objective chance. That is a cost, but no premise hides it, and the theorems above show it is forced. The conclusion is neutral between theism and naturalism: a necessarily existing initial physical state with chancy evolution, as in [Graham Oppy's](https://philarchive.org/archive/OPPUNC) naturalism, satisfies it. Uniqueness, personhood, and goodness are not shown.
+
 ## Repository map
 
 ```mermaid
 flowchart LR
     Reader([Reader]) -->|"watch · listen"| Media[("media/<br/>film · essay")]
     Reader -->|read| Paper["source/<br/>the paper"]
-    Paper -->|"formal targets"| Lean{{"ActualityGround.lean<br/>25 theorems"}}
+    Paper -->|"formal targets"| Lean{{"ActualityGround.lean<br/>39 theorems"}}
     Lean --> Check["check.sh<br/>type-check<br/>build · audit"]
     Pins[("lean-toolchain<br/>lakefile.toml<br/>lake-manifest.json")] -->|pinned| Check
     Audit["Audit.lean"] --> Check
@@ -237,11 +283,11 @@ flowchart LR
 |---|---|
 | [`source/actuality_and_necessary_ground.pdf`](source/actuality_and_necessary_ground.pdf) | The paper, unchanged |
 | [`source/article_extracted.txt`](source/article_extracted.txt) | Page-labelled text extraction of the paper |
-| [`ActualityGround.lean`](ActualityGround.lean) | The modal model, the 25 theorems, and the models and countermodels |
+| [`ActualityGround.lean`](ActualityGround.lean) | The modal model, the 39 theorems, the models and countermodels, and the strengthened argument |
 | [`Audit.lean`](Audit.lean) | Transitive axiom audit of every theorem |
 | [`check.sh`](check.sh) | One command: type-check, build, audit |
 | [`lean-toolchain`](lean-toolchain) · [`lakefile.toml`](lakefile.toml) · [`lake-manifest.json`](lake-manifest.json) | Pin Lean 4.19.0 and mathlib `c44e0c8…` |
-| [`compilation_output.txt`](compilation_output.txt) | Recorded run of 18 October 2026 |
+| [`compilation_output.txt`](compilation_output.txt) | Recorded run of 28 October 2026 |
 | [`REPORT.md`](REPORT.md) | Premises, scope, and models, stated precisely |
 | [`media/introduction.mp4`](media/introduction.mp4) | The introduction film, 7 minutes |
 | [`media/Why_Math_Cannot_Create_Physical_Reality_compressed.mp3`](media/Why_Math_Cannot_Create_Physical_Reality_compressed.mp3) | The spoken essay, 46 minutes |
@@ -292,7 +338,9 @@ Factivity is stated separately. A complete actual ground’s members actually ob
 
 The development also proves the boundaries. Possibility can hold without actuality. Drop contingency, and mathematical necessitation is consistent. Drop PSR, and brute contingent actuality has no ground. Drop P10, and only contingent grounds remain. Drop factivity, and a non-contingent ground may be impossible. The premises of the main theorem are jointly satisfiable, including with contingent effects. A necessary component can coexist with a collection that, taken as a whole, obtains contingently. An extra theological attribute can be false in a model of the premises.
 
-[`Audit.lean`](Audit.lean) checks the transitive axiom dependencies of all 25 theorems. Nineteen depend on no axioms. Six use only Lean’s `propext`, `Classical.choice`, and `Quot.sound`. There are no project axioms and no admitted proofs. The record of the 18 October 2026 run is in [`compilation_output.txt`](compilation_output.txt) and [`REPORT.md`](REPORT.md).
+The strengthened results and their models are listed under [The strengthened argument](#the-strengthened-argument).
+
+[`Audit.lean`](Audit.lean) checks the transitive axiom dependencies of all 39 theorems. Twenty-eight depend on no axioms. Eleven use only Lean’s `propext`, `Classical.choice`, and `Quot.sound`. There are no project axioms and no admitted proofs. The record of the 28 October 2026 run is in [`compilation_output.txt`](compilation_output.txt) and [`REPORT.md`](REPORT.md).
 
 ## Reproduce
 
@@ -326,7 +374,7 @@ flowchart TD
     G1 -->|"error · warning"| Stop([stop · non-zero exit])
     G2 -->|"exit 0"| G3{"3 · axiom audit"}
     G2 -->|fail| Stop
-    G3 -->|"all 25 clean"| Pass([VERIFICATION PASSED])
+    G3 -->|"all 39 clean"| Pass([VERIFICATION PASSED])
     G3 -->|"axiom found<br/>or too few theorems"| Stop
 ```
 
@@ -334,7 +382,7 @@ flowchart TD
 |---|---|---|
 | 1 · type-check | `lake env lean -DwarningAsError=true ActualityGround.lean` | any error or warning |
 | 2 · build | `lake build` | the build fails |
-| 3 · axiom audit | `lake env lean -DwarningAsError=true Audit.lean` | the project declares an axiom, a theorem depends on an axiom other than `propext`, `Classical.choice`, or `Quot.sound`, or fewer than 25 theorems are found |
+| 3 · axiom audit | `lake env lean -DwarningAsError=true Audit.lean` | the project declares an axiom, a theorem depends on an axiom other than `propext`, `Classical.choice`, or `Quot.sound`, or fewer than 39 theorems are found |
 
 ---
 

@@ -6,6 +6,8 @@ import Mathlib.Data.Set.Basic
 Source: `actuality_and_necessary_ground.pdf`, 20 September 2026, 16 pages.
 The formal targets are Proposition 1 (p. 5), Proposition 2 (p. 6),
 the twelve steps (p. 12), and the modal-collapse objection (p. 10).
+A final section strengthens the argument with two premises that are not in
+the source, P10* and P3*, and proves what they add and what they cost.
 
 All philosophical principles are explicit arguments of the theorems below.
 In particular, PSR and the exclusion of wholly contingent complete grounds
@@ -210,6 +212,151 @@ theorem represented_totality_necessary_ground
 
 end Grounding
 
+/-! ## Strengthened argument
+
+The original P10 excludes only grounds whose members are all contingent, so a
+contingent ground padded with a necessary mathematical truth satisfies it
+(`Models.original_P10_met_by_mathematics`). Two premises that are not in the
+source close that gap. P10* applies P10's own rationale to every member of a
+complete ground of the totality, and P3* says that abstract entities alone
+cannot completely ground concrete actuality. Under them the conclusion
+concerns a necessarily existing concrete member, and the modal-collapse worry
+becomes a theorem about how that member grounds: never by necessitation.
+-/
+
+section Strengthened
+
+variable {World : Type u} {Entity : Type v}
+
+/-- P10*, ultimacy: no member of a complete ground of `C` is contingent.
+    P10's rationale, that a contingent ground's own actuality remains within
+    what was to be explained, is applied to each member. It constrains only
+    complete grounds of the designated totality, not explanations of single
+    facts within it. -/
+def NoContingentMember (R : World → World → Prop)
+    (holds : Entity → WProp World) (w : World)
+    (grounds : Set Entity → WProp World → Prop) (C : WProp World) : Prop :=
+  ∀ G, grounds G C → ∀ g ∈ G, ¬ Contingent R (holds g) w
+
+/-- P3*, abstract insufficiency: every complete ground of `C` has a concrete
+    member, so abstract entities such as mathematical structures cannot
+    ground `C` on their own. `concreteE` is an interpreted predicate on
+    candidate grounds, separate from the PSR domain predicate `concrete`. -/
+def AbstractInsufficiency (concreteE : Entity → Prop)
+    (grounds : Set Entity → WProp World → Prop) (C : WProp World) : Prop :=
+  ∀ G, grounds G C → ∃ g ∈ G, concreteE g
+
+variable {R : World → World → Prop} {holds : Entity → WProp World}
+variable {w : World} {grounds : Set Entity → WProp World → Prop}
+variable {concrete : WProp World → Prop} {concreteE : Entity → Prop}
+variable {C : WProp World}
+
+/-- The strengthened premises imply the original P10, so every earlier
+    theorem also holds under them. -/
+theorem strengthened_premises_imply_P10
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hAI : AbstractInsufficiency concreteE grounds C) :
+    NoWhollyContingentGround R holds w grounds C := by
+  intro G hwhole hG
+  obtain ⟨g, hg, _⟩ := hAI G hG
+  exact hstrong G hG g hg (hwhole g hg)
+
+/-- P12*: some complete ground of `C` has a concrete member that actually and
+    necessarily obtains. An abstract member, such as a mathematical truth,
+    cannot be the witness. -/
+theorem necessary_concrete_ground
+    (hrefl : R w w) (hCactual : C w) (hCcont : Contingent R C w)
+    (hCconcrete : concrete C)
+    (hPSR : RestrictedPSR R w concrete grounds)
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hAI : AbstractInsufficiency concreteE grounds C)
+    (hfactive : GroundFactivity w holds grounds) :
+    ∃ G, grounds G C ∧ ∃ g ∈ G, concreteE g ∧ holds g w ∧ Box R (holds g) w := by
+  obtain ⟨G, hG⟩ := hPSR C hCconcrete hCactual hCcont
+  obtain ⟨g, hg, hgc⟩ := hAI G hG
+  have hactual := (hfactive G C hG).2 g hg
+  exact ⟨G, hG, g, hg, hgc, hactual,
+    necessary_of_actual_noncontingent hrefl hactual (hstrong G hG g hg)⟩
+
+/-- Every complete ground of a contingent `C` still obtains at some accessible
+    evaluation where `C` fails. No complete ground therefore settles why `C`
+    obtains rather than its absence: under P10* the ultimate explanation of
+    the totality is non-contrastive. -/
+theorem ground_obtains_where_C_fails
+    (hrefl : R w w) (hCcont : Contingent R C w)
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hfactive : GroundFactivity w holds grounds)
+    {G : Set Entity} (hG : grounds G C) :
+    ∃ v, R w v ∧ ¬ C v ∧ ∀ g ∈ G, holds g v := by
+  obtain ⟨v, hv, hnC⟩ := hCcont.2
+  exact ⟨v, hv, hnC, fun g hg =>
+    necessary_of_actual_noncontingent hrefl ((hfactive G C hG).2 g hg)
+      (hstrong G hG g hg) v hv⟩
+
+/-- Hence no complete ground of a contingent `C` necessitates it. Van Inwagen's
+    modal-collapse dilemma becomes a theorem about the mode of ultimate
+    grounding: it is never necessitation. -/
+theorem ground_does_not_necessitate
+    (hrefl : R w w) (hCcont : Contingent R C w)
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hfactive : GroundFactivity w holds grounds)
+    {G : Set Entity} (hG : grounds G C) :
+    ¬ Box R (fun v => (∀ g ∈ G, holds g v) → C v) w := by
+  intro hnec
+  obtain ⟨v, hv, hnC, hall⟩ :=
+    ground_obtains_where_C_fails hrefl hCcont hstrong hfactive hG
+  exact hnC (hnec v hv hall)
+
+/-- Under P10* and P3*, either some concrete entity is non-contingent, or the
+    totality has no complete ground and is a brute fact. -/
+theorem brute_fact_or_noncontingent_concretum
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hAI : AbstractInsufficiency concreteE grounds C) :
+    (¬ ∃ G, grounds G C) ∨ ∃ g, concreteE g ∧ ¬ Contingent R (holds g) w := by
+  classical
+  by_cases h : ∃ G, grounds G C
+  · obtain ⟨G, hG⟩ := h
+    obtain ⟨g, hg, hgc⟩ := hAI G hG
+    exact Or.inr ⟨g, hgc, hstrong G hG g hg⟩
+  · exact Or.inl h
+
+/-- If every non-contingent entity is abstract, as when the only necessary
+    things are mathematical, the totality has no complete ground under P10*
+    and P3*. Mathematics alone cannot ground concrete actuality. -/
+theorem abstract_necessity_alone_cannot_ground
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hAI : AbstractInsufficiency concreteE grounds C)
+    (honly : ∀ g, ¬ Contingent R (holds g) w → ¬ concreteE g) :
+    ¬ ∃ G, grounds G C := by
+  rintro ⟨G, hG⟩
+  obtain ⟨g, hg, hgc⟩ := hAI G hG
+  exact honly g (hstrong G hG g hg) hgc
+
+/-- The strengthened argument in one statement: mathematics alone does not
+    necessitate `C`, some complete ground of `C` has a necessarily existing
+    concrete member, and that ground does not necessitate `C`. -/
+theorem strengthened_argument
+    {N : WProp World} (hN : Box R N w)
+    (hrefl : R w w) (hCactual : C w) (hCcont : Contingent R C w)
+    (hCconcrete : concrete C)
+    (hPSR : RestrictedPSR R w concrete grounds)
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hAI : AbstractInsufficiency concreteE grounds C)
+    (hfactive : GroundFactivity w holds grounds) :
+    (¬ Box R (fun v => N v → C v) w) ∧
+    ∃ G, grounds G C ∧
+      (∃ g ∈ G, concreteE g ∧ holds g w ∧ Box R (holds g) w) ∧
+      ¬ Box R (fun v => (∀ g ∈ G, holds g v) → C v) w := by
+  obtain ⟨G, hG⟩ := hPSR C hCconcrete hCactual hCcont
+  obtain ⟨g, hg, hgc⟩ := hAI G hG
+  have hactual := (hfactive G C hG).2 g hg
+  exact ⟨modal_non_selection hN hCcont, G, hG,
+    ⟨g, hg, hgc, hactual,
+      necessary_of_actual_noncontingent hrefl hactual (hstrong G hG g hg)⟩,
+    ground_does_not_necessitate hrefl hCcont hstrong hfactive hG⟩
+
+end Strengthened
+
 /-! ## Explicit finite models and countermodels
 These are proved propositions, rather than simulations or trusted computations.
 They delimit exactly what the conditional arguments establish.
@@ -371,6 +518,178 @@ theorem represented_totality_premises_satisfiable :
   · intro G p hG
     exact ⟨hG.1, fun _ _ => Or.inr rfl⟩
 
+/-! ### Models for the strengthened argument
+A candidate ground is a pair of flags: the first marks concreteness, the
+second contingency, and a contingent candidate obtains only at `true`. So
+`(true, false)` is a necessary concrete reality, `(false, false)` is
+mathematics, and `(true, true)` is contingent concrete reality. -/
+
+def itemHolds (g : Bool × Bool) (w : Bool) : Prop := g.2 = false ∨ w = true
+def itemConcrete (g : Bool × Bool) : Prop := g.1 = true
+
+/-- The contingent concrete totality of these models. -/
+def worldFact : WProp Bool := itemHolds (true, true)
+
+/-- Mathematics together with a necessary concrete reality. -/
+def fullGround (G : Set (Bool × Bool)) (p : WProp Bool) : Prop :=
+  p true ∧ G = {(true, false), (false, false)}
+
+/-- Contingent concrete reality padded with mathematics. -/
+def paddedGround (G : Set (Bool × Bool)) (p : WProp Bool) : Prop :=
+  p true ∧ G = {(false, false), (true, true)}
+
+/-- Mathematics alone. -/
+def mathOnlyGround (G : Set (Bool × Bool)) (p : WProp Bool) : Prop :=
+  p true ∧ G = {(false, false)}
+
+/-- Contingent concrete reality alone. -/
+def contingentGround (G : Set (Bool × Bool)) (p : WProp Bool) : Prop :=
+  p true ∧ G = {(true, true)}
+
+def noItemGrounds (_ : Set (Bool × Bool)) (_ : WProp Bool) : Prop := False
+
+theorem necessary_items_not_contingent (c : Bool) :
+    ¬ Contingent allAccess (itemHolds (c, false)) true := by
+  rintro ⟨_, v, _, hv⟩
+  exact hv (Or.inl rfl)
+
+theorem worldFact_contingent : Contingent allAccess worldFact true := by
+  refine ⟨⟨true, True.intro, Or.inr rfl⟩, false, True.intro, ?_⟩
+  rintro (h | h) <;> cases h
+
+/-- The padding loophole in the original P10: with contingent reality padded
+    by mathematics, PSR, P10 and factivity hold, and the original conclusion
+    is met with mathematics as the necessary member. No complete ground has
+    a necessary concrete member. -/
+theorem original_P10_met_by_mathematics :
+    RestrictedPSR allAccess true allConcrete paddedGround ∧
+    NoWhollyContingentGround allAccess itemHolds true paddedGround worldFact ∧
+    GroundFactivity true itemHolds paddedGround ∧
+    (∃ G, paddedGround G worldFact ∧ ∃ g ∈ G, ¬ itemConcrete g ∧
+      itemHolds g true ∧ Box allAccess (itemHolds g) true) ∧
+    ¬ (∃ G, paddedGround G worldFact ∧ ∃ g ∈ G, itemConcrete g ∧
+      Box allAccess (itemHolds g) true) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro p _ hp _
+    exact ⟨{(false, false), (true, true)}, hp, rfl⟩
+  · intro G hwhole hG
+    rw [hG.2] at hwhole
+    exact necessary_items_not_contingent false (hwhole (false, false) (Or.inl rfl))
+  · intro G p hG
+    refine ⟨hG.1, fun g hg => ?_⟩
+    rw [hG.2] at hg
+    rcases hg with rfl | hg
+    · exact Or.inl rfl
+    · obtain rfl : g = (true, true) := hg
+      exact Or.inr rfl
+  · exact ⟨{(false, false), (true, true)}, ⟨Or.inr rfl, rfl⟩, (false, false),
+      Or.inl rfl, (by intro h; cases h), Or.inl rfl, fun _ _ => Or.inl rfl⟩
+  · rintro ⟨G, hG, g, hg, hgc, hbox⟩
+    rw [hG.2] at hg
+    rcases hg with rfl | hg
+    · cases hgc
+    · obtain rfl : g = (true, true) := hg
+      rcases hbox false True.intro with h | h <;> cases h
+
+/-- All strengthened premises hold with a contingent world, so they do not
+    collapse modality. The ground is mathematics together with a necessary
+    concrete reality. -/
+theorem strengthened_premises_satisfiable :
+    Box allAccess (fun _ : Bool => True) true ∧
+    worldFact true ∧ Contingent allAccess worldFact true ∧ allConcrete worldFact ∧
+    RestrictedPSR allAccess true allConcrete fullGround ∧
+    NoContingentMember allAccess itemHolds true fullGround worldFact ∧
+    AbstractInsufficiency itemConcrete fullGround worldFact ∧
+    GroundFactivity true itemHolds fullGround := by
+  refine ⟨fun _ _ => True.intro, Or.inr rfl, worldFact_contingent, True.intro,
+    ?_, ?_, ?_, ?_⟩
+  · intro p _ hp _
+    exact ⟨{(true, false), (false, false)}, hp, rfl⟩
+  · intro G hG g hg
+    rw [hG.2] at hg
+    rcases hg with rfl | hg
+    · exact necessary_items_not_contingent true
+    · obtain rfl : g = (false, false) := hg
+      exact necessary_items_not_contingent false
+  · intro G hG
+    rw [hG.2]
+    exact ⟨(true, false), Or.inl rfl, rfl⟩
+  · intro G p hG
+    refine ⟨hG.1, fun g hg => ?_⟩
+    rw [hG.2] at hg
+    rcases hg with rfl | hg
+    · exact Or.inl rfl
+    · obtain rfl : g = (false, false) := hg
+      exact Or.inl rfl
+
+/-- Mathematics alone as the ground: PSR, P10* and factivity hold, yet no
+    complete ground has a concrete member. P3* is exactly what excludes the
+    claim that mathematics creates physical reality. -/
+theorem dropping_AI_countermodel :
+    RestrictedPSR allAccess true allConcrete mathOnlyGround ∧
+    NoContingentMember allAccess itemHolds true mathOnlyGround worldFact ∧
+    GroundFactivity true itemHolds mathOnlyGround ∧
+    ¬ AbstractInsufficiency itemConcrete mathOnlyGround worldFact := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro p _ hp _
+    exact ⟨{(false, false)}, hp, rfl⟩
+  · intro G hG g hg
+    rw [hG.2] at hg
+    obtain rfl : g = (false, false) := hg
+    exact necessary_items_not_contingent false
+  · intro G p hG
+    refine ⟨hG.1, fun g hg => ?_⟩
+    rw [hG.2] at hg
+    obtain rfl : g = (false, false) := hg
+    exact Or.inl rfl
+  · intro hAI
+    obtain ⟨g, hg, hgc⟩ := hAI {(false, false)} ⟨Or.inr rfl, rfl⟩
+    obtain rfl : g = (false, false) := hg
+    cases hgc
+
+/-- Contingent concrete reality as the whole ground: PSR, P3* and factivity
+    hold, and no complete ground has a necessary member. This is the regress
+    or Hume–Edwards picture, and P10* is exactly what excludes it. -/
+theorem dropping_strong_nc_countermodel :
+    RestrictedPSR allAccess true allConcrete contingentGround ∧
+    AbstractInsufficiency itemConcrete contingentGround worldFact ∧
+    GroundFactivity true itemHolds contingentGround ∧
+    ¬ NoContingentMember allAccess itemHolds true contingentGround worldFact ∧
+    ¬ (∃ G, contingentGround G worldFact ∧
+      ∃ g ∈ G, Box allAccess (itemHolds g) true) := by
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · intro p _ hp _
+    exact ⟨{(true, true)}, hp, rfl⟩
+  · intro G hG
+    rw [hG.2]
+    exact ⟨(true, true), rfl, rfl⟩
+  · intro G p hG
+    refine ⟨hG.1, fun g hg => ?_⟩
+    rw [hG.2] at hg
+    obtain rfl : g = (true, true) := hg
+    exact Or.inr rfl
+  · intro hstrong
+    exact hstrong {(true, true)} ⟨Or.inr rfl, rfl⟩ (true, true) rfl
+      worldFact_contingent
+  · rintro ⟨G, hG, g, hg, hbox⟩
+    rw [hG.2] at hg
+    obtain rfl : g = (true, true) := hg
+    rcases hbox false True.intro with h | h <;> cases h
+
+/-- Brute contingent actuality: P10*, P3* and factivity hold vacuously, the
+    world is contingent, and nothing grounds it. -/
+theorem dropping_PSR_strong_countermodel :
+    Contingent allAccess worldFact true ∧
+    NoContingentMember allAccess itemHolds true noItemGrounds worldFact ∧
+    AbstractInsufficiency itemConcrete noItemGrounds worldFact ∧
+    GroundFactivity true itemHolds noItemGrounds ∧
+    ¬ RestrictedPSR allAccess true allConcrete noItemGrounds := by
+  refine ⟨worldFact_contingent, fun _ h => False.elim h, fun _ h => False.elim h,
+    fun _ _ h => False.elim h, ?_⟩
+  intro hPSR
+  obtain ⟨_, h⟩ := hPSR worldFact True.intro (Or.inr rfl) worldFact_contingent
+  exact h
+
 end Models
 
 end ActualityGround
@@ -402,3 +721,17 @@ and any accidental admitted proof dependency in the actual compilation output. -
 #print axioms ActualityGround.Models.extra_attribute_not_entailed
 #print axioms ActualityGround.Models.necessary_component_not_necessary_collection
 #print axioms ActualityGround.Models.represented_totality_premises_satisfiable
+#print axioms ActualityGround.strengthened_premises_imply_P10
+#print axioms ActualityGround.necessary_concrete_ground
+#print axioms ActualityGround.ground_obtains_where_C_fails
+#print axioms ActualityGround.ground_does_not_necessitate
+#print axioms ActualityGround.brute_fact_or_noncontingent_concretum
+#print axioms ActualityGround.abstract_necessity_alone_cannot_ground
+#print axioms ActualityGround.strengthened_argument
+#print axioms ActualityGround.Models.necessary_items_not_contingent
+#print axioms ActualityGround.Models.worldFact_contingent
+#print axioms ActualityGround.Models.original_P10_met_by_mathematics
+#print axioms ActualityGround.Models.strengthened_premises_satisfiable
+#print axioms ActualityGround.Models.dropping_AI_countermodel
+#print axioms ActualityGround.Models.dropping_strong_nc_countermodel
+#print axioms ActualityGround.Models.dropping_PSR_strong_countermodel

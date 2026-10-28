@@ -2,7 +2,7 @@
 
 **Article:** *From Mathematical Possibility to Actuality: A Modal-Existential Argument for a Necessary Ground of Concrete Reality*, “A Philosophical Reconstruction,” 20 September 2026. The original 16-page PDF was found on the user's Desktop, read completely by page-labelled text extraction, and its two principal propositions were also inspected as rendered pages. An unchanged copy is included in `source/`; its SHA-256 is `5e13210df5408b365746785757aa8494b53e96e4887115f16470f7445f06a0ea`.
 
-**Verified on 18 October 2026:** direct Lean type-check, Lake build, and the separate dependency audit all exited **0**. All **25 theorems** passed. Nineteen have no axiom dependencies; six use only Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. There are no added axioms or admitted proofs. The exact Lean 4.19.0 compiler, mathlib revision, and source hashes are recorded in `compilation_output.txt`.
+**Verified on 28 October 2026:** direct Lean type-check, Lake build, and the separate dependency audit all exited **0**. All **39 theorems** passed. Twenty-eight have no axiom dependencies; eleven use only Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. There are no added axioms or admitted proofs. The exact Lean 4.19.0 compiler, mathlib revision, and source hashes are recorded in `compilation_output.txt`. The first 25 theorems formalize the article; the other 14 form the strengthened argument described below. The 25 article theorems were first verified on 18 October 2026.
 
 ## What is proved
 
@@ -40,7 +40,36 @@ For the necessity bridge, `R w w` explicitly supplies accessibility of the actua
 
 `grounds` is an uninterpreted complete-explanation relation. Factivity connects it to actual obtaining; it is not defined as necessary implication. No temporal ordering or prohibition of every infinite regress is assumed. This permits timeless grounding but does not prove a physical block-universe theory.
 
-The necessary component is not proved unique, personal, good, omniscient, nonmathematical, or identifiable with God. Gödel's incompleteness theorems, quantum physics, and the historical interpretations in sections 5–11 are contextual discussion and are not proved in this development.
+Under the article's premises, the necessary component is not proved unique, personal, good, omniscient, nonmathematical, or identifiable with God. The strengthened argument below adds P3\*, under which it is concrete; the other attributes remain unproved. Gödel's incompleteness theorems, quantum physics, and the historical interpretations in sections 5–11 are contextual discussion and are not proved in this development.
+
+## Strengthened argument (beyond the article)
+
+P10 excludes only grounds all of whose members are contingent. `Models.original_P10_met_by_mathematics` shows the consequence. Contingent concrete reality padded with a mathematical candidate satisfies PSR, P10, and factivity. The formal conclusion is then met with the mathematical candidate as the necessarily obtaining member, and no complete ground has a necessary concrete member. The article's rationale for P10 applies to each contingent member, not only to wholly contingent collections. Its claim that the ground lies "beyond merely possible mathematical description" needs a premise the article never states.
+
+Two premises close these gaps. Both are theorem arguments, not axioms.
+
+- **P10\*, ultimacy** (`NoContingentMember`): no member of a complete ground of the designated totality is contingent. It constrains only complete grounds of that totality, not explanations of facts within it.
+- **P3\*, abstract insufficiency** (`AbstractInsufficiency`): every complete ground of the totality has a member satisfying the interpreted predicate `concreteE`. Abstract candidates alone, including mathematical ones, cannot ground it. The concreteness classification is an interpretation assumption, as `concrete` is for the PSR domain.
+
+| Result | Formal theorem | Exact result |
+|---|---|---|
+| Strengthening | `strengthened_premises_imply_P10` | P10\* and P3\* imply P10, so every earlier theorem applies under them. |
+| P12\* | `necessary_concrete_ground` | With PSR, P10\*, P3\*, factivity, and self-access, some complete ground of C has a concrete member that actually and necessarily obtains. |
+| Non-contrastive ground | `ground_obtains_where_C_fails` | If C is contingent, then under P10\*, factivity, and self-access, every member of every complete ground of C obtains at some accessible evaluation where C fails. |
+| Non-necessitation | `ground_does_not_necessitate` | Under the same premises, no complete ground of C necessitates C. |
+| Dilemma | `brute_fact_or_noncontingent_concretum` | Under P10\* and P3\*, either C has no complete ground, or some concrete candidate is non-contingent. |
+| Abstract necessity alone | `abstract_necessity_alone_cannot_ground` | Under P10\* and P3\*, if every non-contingent candidate is abstract, C has no complete ground. |
+| Combined | `strengthened_argument` | Modal non-selection, P12\*, and non-necessitation hold together. |
+
+`Models.strengthened_premises_satisfiable` is a joint two-world model of P2, P4, PSR, P10\*, P3\*, and factivity with a contingent world. The strengthened premises therefore do not collapse modality; the ground in that model is a mathematical candidate together with a necessary concrete one. Each new premise is essential:
+
+- `Models.dropping_AI_countermodel`: without P3\*, a mathematical candidate alone grounds the world.
+- `Models.dropping_strong_nc_countermodel`: without P10\*, contingent concrete reality grounds the world and no complete ground has a necessary member.
+- `Models.dropping_PSR_strong_countermodel`: without PSR, the world is a brute contingent fact while P10\*, P3\*, and factivity hold vacuously.
+
+The cost is made explicit rather than removed. Van Inwagen's modal-collapse argument assumes that an explanation necessitates what it explains. `ground_does_not_necessitate` shows that, given contingency and P10\*, no complete ground of the totality can. Whoever requires necessitating explanation must therefore reject PSR for the totality, or contingency. Whoever keeps both must accept an ultimate explanation that is non-necessitating and, by `ground_obtains_where_C_fails`, non-contrastive, as with free choice or objective chance.
+
+The conclusion is neutral between theistic and naturalistic readings. A necessarily existing initial physical state with chancy evolution satisfies it. Uniqueness, personhood, goodness, and identification with God remain unproved.
 
 ## Models and verification
 
@@ -53,6 +82,7 @@ The source includes proved two-world models and countermodels:
 - Removing factivity permits a non-contingent but impossible ground candidate.
 - All premises of the designated-C theorem have an explicit joint model with contingent effects. A further model satisfies the premises for the explicit `TotalFact` construction, with both necessary and contingent entities. Thus these formal packages are satisfiable relative to Lean's foundations; they do not smuggle in necessitation of the effect.
 - A necessary component can coexist with contingent obtaining of the whole collection. An arbitrary additional theological attribute can consistently be interpreted as false.
+- The strengthened argument has its own joint model and countermodels, listed in the previous section.
 
 `compilation_output.txt` records the compiler identity, pinned dependency revision, source hashes, direct source type-check, Lake build, and transitive dependency audit. `Audit.lean` inspects every theorem in the `ActualityGround` namespace and rejects any project axiom or any transitive axiom outside Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. These foundational principles are distinguished from the unproved philosophical premises above. No admitted proof, arbitrary philosophical axiom declaration, or native-computation proof shortcut is used.
 

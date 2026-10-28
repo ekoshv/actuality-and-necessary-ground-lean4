@@ -25,6 +25,6 @@ run_cmd do
           unless allowed.contains dependency do
             throwError "Forbidden axiom {dependency} in theorem {name}"
       | _ => pure ()
-  if count < 25 then
-    throwError "Expected at least 25 audited theorems, found {count}"
+  if count < 39 then
+    throwError "Expected at least 39 audited theorems, found {count}"
   logInfo m!"PASS: audited all {count} theorems in ActualityGround; no project axioms or admitted-proof dependencies. Allowed foundations: propext, Classical.choice, Quot.sound."
