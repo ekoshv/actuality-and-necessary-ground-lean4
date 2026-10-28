@@ -13,10 +13,12 @@
   <a href="REPORT.md"><strong>Verification report</strong></a>
   &nbsp;·&nbsp;
   <a href="#the-strengthened-argument"><strong>Strengthened argument</strong></a>
+  &nbsp;·&nbsp;
+  <a href="#starting-points-for-non-theists"><strong>For non-theists</strong></a>
 </p>
 
 <p align="center">
-  Lean 4.19.0 &nbsp;·&nbsp; 39 theorems &nbsp;·&nbsp; no added axioms &nbsp;·&nbsp; conditional throughout
+  Lean 4.19.0 &nbsp;·&nbsp; 40 theorems &nbsp;·&nbsp; no added axioms &nbsp;·&nbsp; conditional throughout
 </p>
 
 ---
@@ -252,18 +254,33 @@ flowchart TD
 
 The premises are consistent with a contingent world: `Models.strengthened_premises_satisfiable` gives a model in which mathematics and a necessary concrete reality ground the world together. Each new premise is needed. Without P3\*, mathematics alone can ground the world (`Models.dropping_AI_countermodel`). Without P10\*, contingent reality can ground itself and nothing necessary is required (`Models.dropping_strong_nc_countermodel`). Without PSR-A, the world is a brute fact (`Models.dropping_PSR_strong_countermodel`).
 
-What remains is a choice of premises, each with a named cost:
+Accepting all the premises commits you to an ultimate explanation that is non-contrastive and non-necessitating, as with free choice or objective chance. That is a cost, but no premise hides it, and the theorems above show it is forced. What remains is a choice of premises, each with a named cost. The conclusion is neutral between theism and naturalism, and the next section sets out those choices for someone who does not believe in a God-like being.
 
-| Exit | Denies | Cost |
-|---|---|---|
-| Necessitarianism | P4 | Nothing could have been otherwise. |
-| Brute fact | PSR-A for the totality | Explanation stops at the largest contingent fact. |
-| Self-grounding totality | P10\* | The whole is explained by its own members. |
-| Abstract grounding | P3\* | Mathematics or other abstracta produce concrete reality. |
-| Identity or plenitude | P3 | The abstract/concrete distinction is given up. |
-| Only necessitating explanation counts | PSR-A or P4 | By `ground_does_not_necessitate`, this is van Inwagen's route, not a fifth option. |
+## Starting points for non-theists
 
-Accepting all the premises commits you to an ultimate explanation that is non-contrastive and non-necessitating, as with free choice or objective chance. That is a cost, but no premise hides it, and the theorems above show it is forced. The conclusion is neutral between theism and naturalism: a necessarily existing initial physical state with chancy evolution, as in [Graham Oppy's](https://philarchive.org/archive/OPPUNC) naturalism, satisfies it. Uniqueness, personhood, and goodness are not shown.
+Someone who does not believe in a God-like being can start from these principles instead of a blanket rejection. The theorems prove less than theism needs, and they state exactly what a non-theist has to hold. There are two kinds of starting point.
+
+**Keep every premise, and read the ground naturalistically.** Accept contingency, PSR-A, ultimacy, abstract insufficiency, factivity, and self-access. Then some concrete reality exists necessarily and grounds the world without necessitating it (`necessary_concrete_ground`, `ground_does_not_necessitate`). No premise mentions intellect, will, goodness, or personhood, so none of them follows. `Models.strengthened_ground_need_not_be_personal` checks this: every premise and the conclusion hold while no member of any complete ground is personal. A naturalist can take the necessary reality to be a necessarily existing initial physical state whose later evolution is objectively chancy, as [Graham Oppy](https://philarchive.org/archive/OPPUNC) proposes. Chance, rather than choice, then supplies the non-necessitation the theorems force.
+
+This reading has two costs. You must hold that some physical reality could not have failed to exist, although the world as a whole stays contingent. And the ultimate explanation does not say why this world exists rather than another (`ground_obtains_where_C_fails`). A theist who appeals to free creation pays the second cost too: by ultimacy, a contingent choice cannot belong to the ultimate ground.
+
+**Or reject one premise, and accept what that commits you to.**
+
+| Starting point | Premise rejected | What you then hold | Lean model |
+|---|---|---|---|
+| Brute fact | PSR-A for the totality | The universe as a whole has no explanation. Explanation stops at the largest contingent fact. | `Models.dropping_PSR_strong_countermodel` |
+| Self-grounding universe | P10\*, ultimacy | The whole is explained by its own members, in a regress or a closed structure. | `Models.dropping_strong_nc_countermodel` |
+| Mathematical naturalism | P3\*, or P3 | Mathematics gives rise to physical reality, or simply is it. The abstract/concrete distinction must then be rebuilt. | `Models.dropping_AI_countermodel`, for P3\* |
+| Plenitude | P3 | Every possible world is concrete, and "actual" only marks our own. Why there is a plurality at all stays open. | none; P3 is a matter of interpretation |
+| Necessitarianism | P4, contingency | The universe could not have been otherwise. | `Models.dropping_contingency_allows_necessitation` |
+
+**What no one can do consistently, theist or not.**
+
+- Accept every premise and deny that any concrete reality exists necessarily. That contradicts `necessary_concrete_ground`.
+- Keep PSR-A, ultimacy, and contingency while insisting that a real explanation must necessitate what it explains. Given factivity and self-access, `ground_does_not_necessitate` makes this inconsistent; it is van Inwagen's point.
+- Treat the argument, or its verification, as a proof or disproof of God. It shows where a theist and a non-theist must part ways, and that both positions are consistent with the theorems.
+
+The map is symmetric. A theist starts from the same theorems and still has to argue that the necessary concrete reality is one, simple, intelligent, free, and good. None of that follows here.
 
 ## Repository map
 
@@ -272,7 +289,7 @@ flowchart LR
     Reader([Reader]) -->|"watch · listen"| Media[("media/<br/>film · essay")]
     Reader -->|read| Paper["the paper<br/>revised edition"]
     Orig[("source/<br/>first edition")] -->|"revised as"| Paper
-    Paper -->|"formal targets"| Lean{{"ActualityGround.lean<br/>39 theorems"}}
+    Paper -->|"formal targets"| Lean{{"ActualityGround.lean<br/>40 theorems"}}
     Lean --> Check["check.sh<br/>type-check<br/>build · audit"]
     Pins[("lean-toolchain<br/>lakefile.toml<br/>lake-manifest.json")] -->|pinned| Check
     Audit["Audit.lean"] --> Check
@@ -286,7 +303,7 @@ flowchart LR
 | [`paper/actuality_and_necessary_ground.tex`](paper/actuality_and_necessary_ground.tex) | LaTeX source of the revised edition |
 | [`source/actuality_and_necessary_ground.pdf`](source/actuality_and_necessary_ground.pdf) | The first edition of 20 September 2026, unchanged; every verification run records its hash |
 | [`source/article_extracted.txt`](source/article_extracted.txt) | Page-labelled text extraction of the first edition |
-| [`ActualityGround.lean`](ActualityGround.lean) | The modal model, the 39 theorems, the models and countermodels, and the strengthened argument |
+| [`ActualityGround.lean`](ActualityGround.lean) | The modal model, the 40 theorems, the models and countermodels, and the strengthened argument |
 | [`Audit.lean`](Audit.lean) | Transitive axiom audit of every theorem |
 | [`check.sh`](check.sh) | One command: type-check, build, audit |
 | [`lean-toolchain`](lean-toolchain) · [`lakefile.toml`](lakefile.toml) · [`lake-manifest.json`](lake-manifest.json) | Pin Lean 4.19.0 and mathlib `c44e0c8…` |
@@ -343,7 +360,7 @@ The development also proves the boundaries. Possibility can hold without actuali
 
 The strengthened results and their models are listed under [The strengthened argument](#the-strengthened-argument).
 
-[`Audit.lean`](Audit.lean) checks the transitive axiom dependencies of all 39 theorems. Twenty-eight depend on no axioms. Eleven use only Lean’s `propext`, `Classical.choice`, and `Quot.sound`. There are no project axioms and no admitted proofs. The record of the 28 October 2026 run is in [`compilation_output.txt`](compilation_output.txt) and [`REPORT.md`](REPORT.md).
+[`Audit.lean`](Audit.lean) checks the transitive axiom dependencies of all 40 theorems. Twenty-nine depend on no axioms. Eleven use only Lean’s `propext`, `Classical.choice`, and `Quot.sound`. There are no project axioms and no admitted proofs. The record of the 28 October 2026 run is in [`compilation_output.txt`](compilation_output.txt) and [`REPORT.md`](REPORT.md).
 
 ## Reproduce
 
@@ -377,7 +394,7 @@ flowchart TD
     G1 -->|"error · warning"| Stop([stop · non-zero exit])
     G2 -->|"exit 0"| G3{"3 · axiom audit"}
     G2 -->|fail| Stop
-    G3 -->|"all 39 clean"| Pass([VERIFICATION PASSED])
+    G3 -->|"all 40 clean"| Pass([VERIFICATION PASSED])
     G3 -->|"axiom found<br/>or too few theorems"| Stop
 ```
 
@@ -385,7 +402,7 @@ flowchart TD
 |---|---|---|
 | 1 · type-check | `lake env lean -DwarningAsError=true ActualityGround.lean` | any error or warning |
 | 2 · build | `lake build` | the build fails |
-| 3 · axiom audit | `lake env lean -DwarningAsError=true Audit.lean` | the project declares an axiom, a theorem depends on an axiom other than `propext`, `Classical.choice`, or `Quot.sound`, or fewer than 39 theorems are found |
+| 3 · axiom audit | `lake env lean -DwarningAsError=true Audit.lean` | the project declares an axiom, a theorem depends on an axiom other than `propext`, `Classical.choice`, or `Quot.sound`, or fewer than 40 theorems are found |
 
 The paper is built from [`paper/actuality_and_necessary_ground.tex`](paper/actuality_and_necessary_ground.tex) with pdflatex. Run the second command three times so the contents and cross-references settle:
 

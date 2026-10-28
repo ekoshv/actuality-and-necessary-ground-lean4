@@ -690,6 +690,26 @@ theorem dropping_PSR_strong_countermodel :
   obtain ⟨_, h⟩ := hPSR worldFact True.intro (Or.inr rfl) worldFact_contingent
   exact h
 
+/-- Nothing in the strengthened argument makes the necessary concrete member
+    personal. Under one reading of an arbitrary further attribute, every
+    premise and the conclusion hold while no member of any complete ground has
+    the attribute, so the member can be read as an impersonal reality such as
+    a necessary initial physical state. -/
+theorem strengthened_ground_need_not_be_personal :
+    ∃ personal : Bool × Bool → Prop,
+      RestrictedPSR allAccess true allConcrete fullGround ∧
+      NoContingentMember allAccess itemHolds true fullGround worldFact ∧
+      AbstractInsufficiency itemConcrete fullGround worldFact ∧
+      GroundFactivity true itemHolds fullGround ∧
+      (∃ G, fullGround G worldFact ∧ ∃ g ∈ G, itemConcrete g ∧
+        Box allAccess (itemHolds g) true) ∧
+      ∀ G, fullGround G worldFact → ∀ g ∈ G, ¬ personal g := by
+  obtain ⟨_, _, _, _, hPSR, hstrong, hAI, hfact⟩ := strengthened_premises_satisfiable
+  exact ⟨fun _ => False, hPSR, hstrong, hAI, hfact,
+    ⟨{(true, false), (false, false)}, ⟨Or.inr rfl, rfl⟩, (true, false), Or.inl rfl,
+      rfl, fun _ _ => Or.inl rfl⟩,
+    fun _ _ _ _ h => h⟩
+
 end Models
 
 end ActualityGround
@@ -735,3 +755,4 @@ and any accidental admitted proof dependency in the actual compilation output. -
 #print axioms ActualityGround.Models.dropping_AI_countermodel
 #print axioms ActualityGround.Models.dropping_strong_nc_countermodel
 #print axioms ActualityGround.Models.dropping_PSR_strong_countermodel
+#print axioms ActualityGround.Models.strengthened_ground_need_not_be_personal

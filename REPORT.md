@@ -2,7 +2,7 @@
 
 **Article:** *From Mathematical Possibility to Actuality: A Modal-Existential Argument for a Necessary Ground of Concrete Reality*, “A Philosophical Reconstruction,” 20 September 2026. The original 16-page PDF was found on the user's Desktop, read completely by page-labelled text extraction, and its two principal propositions were also inspected as rendered pages. An unchanged copy is included in `source/`; its SHA-256 is `5e13210df5408b365746785757aa8494b53e96e4887115f16470f7445f06a0ea`. A revised edition of 28 October 2026, which presents the strengthened argument in its Section 5 and reports this formalization in its Section 15, is `actuality_and_necessary_ground.pdf` in the repository root; its LaTeX source is `paper/actuality_and_necessary_ground.tex`. Throughout this report, "the article" means the first edition.
 
-**Verified on 28 October 2026:** direct Lean type-check, Lake build, and the separate dependency audit all exited **0**. All **39 theorems** passed. Twenty-eight have no axiom dependencies; eleven use only Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. There are no added axioms or admitted proofs. The exact Lean 4.19.0 compiler, mathlib revision, and source hashes are recorded in `compilation_output.txt`. The first 25 theorems formalize the article; the other 14 form the strengthened argument described below. The 25 article theorems were first verified on 18 October 2026.
+**Verified on 28 October 2026:** direct Lean type-check, Lake build, and the separate dependency audit all exited **0**. All **40 theorems** passed. Twenty-nine have no axiom dependencies; eleven use only Lean's standard `propext`, `Classical.choice`, and `Quot.sound`. There are no added axioms or admitted proofs. The exact Lean 4.19.0 compiler, mathlib revision, and source hashes are recorded in `compilation_output.txt`. The first 25 theorems formalize the article; the other 15 form the strengthened argument described below. The 25 article theorems were first verified on 18 October 2026.
 
 ## What is proved
 
@@ -66,6 +66,8 @@ Two premises close these gaps. Both are theorem arguments, not axioms.
 - `Models.dropping_AI_countermodel`: without P3\*, a mathematical candidate alone grounds the world.
 - `Models.dropping_strong_nc_countermodel`: without P10\*, contingent concrete reality grounds the world and no complete ground has a necessary member.
 - `Models.dropping_PSR_strong_countermodel`: without PSR, the world is a brute contingent fact while P10\*, P3\*, and factivity hold vacuously.
+
+`Models.strengthened_ground_need_not_be_personal` adds that nothing in the strengthened argument makes the necessary concrete member personal. Under one reading of an arbitrary further attribute, every strengthened premise and the conclusion hold while no member of any complete ground has the attribute.
 
 The cost is made explicit rather than removed. Van Inwagen's modal-collapse argument assumes that an explanation necessitates what it explains. `ground_does_not_necessitate` shows that, given contingency and P10\*, no complete ground of the totality can. Whoever requires necessitating explanation must therefore reject PSR for the totality, or contingency. Whoever keeps both must accept an ultimate explanation that is non-necessitating and, by `ground_obtains_where_C_fails`, non-contrastive, as with free choice or objective chance.
 
