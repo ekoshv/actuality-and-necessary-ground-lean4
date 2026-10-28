@@ -10,6 +10,9 @@
 \usepackage{array}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
+\usepackage[titles]{tocloft}
+\usepackage{needspace}
+\usepackage{float}
 \usepackage{xcolor}
 \usepackage{url}
 \usepackage[colorlinks=true,
@@ -30,8 +33,12 @@
 \setlength{\headheight}{14pt}
 \setlength{\emergencystretch}{1.5em}
 
-\titleformat*{\section}{\large\bfseries}
-\titleformat*{\subsection}{\normalsize\bfseries}
+\titleformat*{\section}{\needspace{7\baselineskip}\large\bfseries}
+\titleformat*{\subsection}{\needspace{5\baselineskip}\normalsize\bfseries}
+\setlength{\cftbeforesecskip}{0.6em}
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
 
 \theoremstyle{plain}
 \newtheorem{proposition}{Proposition}
@@ -64,9 +71,10 @@ This article develops a conditional metaphysical argument from the distinction b
 \end{minipage}
 \end{center}
 
-\tableofcontents
+\clearpage
+{\small\tableofcontents}
 
-\newpage
+\clearpage
 
 \section{The Problem: Description Is Not Yet Actuality}
 
@@ -218,6 +226,7 @@ The conclusion is intentionally modest:
 \end{center}
 It does not yet establish omniscience, perfect goodness, personhood, or any revealed theology.
 
+\clearpage
 \section{Strengthening the Argument}
 \label{sec:strengthened}
 
@@ -616,14 +625,13 @@ The map is symmetric. A theist starts from the same theorems and still has to ar
 
 The inferences of Sections~\ref{sec:modalcore}--\ref{sec:strengthened} have been checked in the Lean~4 proof assistant~\cite{lean4} with the mathlib library~\cite{mathlib}. The development, its audit, and the record of the verification run are available at \url{https://github.com/ekoshv/actuality-and-necessary-ground-lean4}.
 
-\paragraph{Modelling.} Propositions are functions from evaluations to propositions, and necessity and possibility are interpreted over an arbitrary accessibility relation; Proposition~\ref{prop:nonselection} needs no S5 assumption. Candidate grounds form a separate domain, a ground is a set of candidates and may be infinite, and the grounding relation is left uninterpreted. Every philosophical premise, including PSR-A, premise (iii), ultimacy, abstract insufficiency, factivity, and self-access, enters as a hypothesis of the theorems, never as an axiom. The formal theorems therefore verify conditional implications; they do not prove the premises.
-
 \paragraph{Results.} Table~\ref{tab:lean} lists the Lean theorem that verifies each main result.
 
-\begin{table}[tbp]
+\begin{table}[H]
 \centering
+\small
 \renewcommand{\arraystretch}{1.15}
-\begin{tabular}{@{}L{0.44\linewidth}L{0.5\linewidth}@{}}
+\begin{tabular}{@{}L{0.38\linewidth}L{0.58\linewidth}@{}}
 \toprule
 \textbf{Result} & \textbf{Lean theorem} \\
 \midrule
@@ -647,6 +655,8 @@ The necessary ground need not be personal (Section~\ref{sec:nontheist}) & \lean{
 \caption{Main results and the Lean theorems that verify them.}
 \label{tab:lean}
 \end{table}
+
+\paragraph{Modelling.} Propositions are functions from evaluations to propositions, and necessity and possibility are interpreted over an arbitrary accessibility relation; Proposition~\ref{prop:nonselection} needs no S5 assumption. Candidate grounds form a separate domain, a ground is a set of candidates and may be infinite, and the grounding relation is left uninterpreted. Every philosophical premise, including PSR-A, premise (iii), ultimacy, abstract insufficiency, factivity, and self-access, enters as a hypothesis of the theorems, never as an axiom. The formal theorems therefore verify conditional implications; they do not prove the premises.
 
 \paragraph{Foundations.} A separate audit inspects all 40 theorems of the development. Twenty-nine depend on no axioms, and eleven use only Lean's standard \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}. There are no added axioms and no admitted proofs. The verification run of 28 October 2026 used Lean 4.19.0 and mathlib at commit \lean{c44e0c8} (tag \lean{v4.19.0}); the repository records the exact compiler identity and the hashes of all sources, including the first edition of this article.
 
