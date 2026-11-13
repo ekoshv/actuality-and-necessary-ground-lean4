@@ -2,7 +2,7 @@
 
 <p align="center">
   <em>A modal-existential argument for a necessary ground of concrete reality</em><br>
-  A Philosophical Reconstruction · revised edition, 28 October 2026
+  A Philosophical Reconstruction · second revised edition, 13 November 2026
 </p>
 
 <p align="center">
@@ -14,11 +14,13 @@
   &nbsp;·&nbsp;
   <a href="#the-strengthened-argument"><strong>Strengthened argument</strong></a>
   &nbsp;·&nbsp;
+  <a href="#deriving-the-strengthened-premises"><strong>Derived premises</strong></a>
+  &nbsp;·&nbsp;
   <a href="#starting-points-for-non-theists"><strong>For non-theists</strong></a>
 </p>
 
 <p align="center">
-  Lean 4.19.0 &nbsp;·&nbsp; 40 theorems &nbsp;·&nbsp; no added axioms &nbsp;·&nbsp; conditional throughout
+  Lean 4.19.0 &nbsp;·&nbsp; 69 theorems &nbsp;·&nbsp; no added axioms &nbsp;·&nbsp; conditional throughout
 </p>
 
 ---
@@ -256,6 +258,46 @@ The premises are consistent with a contingent world: `Models.strengthened_premis
 
 Accepting all the premises commits you to an ultimate explanation that is non-contrastive and non-necessitating, as with free choice or objective chance. That is a cost, but no premise hides it, and the theorems above show it is forced. What remains is a choice of premises, each with a named cost. The conclusion is neutral between theism and naturalism, and the next section sets out those choices for someone who does not believe in a God-like being.
 
+## Deriving the strengthened premises
+
+The strengthened argument leaves three things open. P10\* and P3\* stand close to the conclusion: together they say that the ground has a concrete member and no contingent member. The modal core does not separate mathematics from the necessary concrete ground, since neither can necessitate a contingent world. And the fact that the ground grounds the world was never itself examined.
+
+Section 6 of the [paper](actuality_and_necessary_ground.pdf) replaces P10\* and P3\* by four finer premises and derives them.
+
+- **Irreflexivity.** No collection grounds the obtaining of one of its own members.
+- **Dissectivity.** A complete ground of the totality also grounds the obtaining of each of its own contingent members, because that obtaining is part of the totality. This is the first edition's rationale for P10.
+- **Production principle.** A complete ground that does not necessitate what it grounds has a member with productive power. Chancy processes and free agents are the standard candidates.
+- **Inertness.** Abstract entities have no productive power.
+
+```mermaid
+flowchart TD
+    Irr(["irreflexivity"]) --> U["P10* · ultimacy<br/>derived"]
+    Dis(["dissectivity"]) --> U
+    U -->|"+ P4 · factivity · self-access"| NN["the ground does not<br/>necessitate C"]
+    NN --> Prod["the ground has a<br/>productive member"]
+    PP(["production principle"]) --> Prod
+    Prod --> AI["P3* · abstract insufficiency<br/>derived"]
+    In(["inertness"]) --> AI
+    AI -->|"+ PSR-A"| Concl{{"a productive, concrete,<br/>necessarily existing member<br/>of a complete ground of C"}}
+    Concl --> Link["the fact that G grounds C<br/>is itself contingent"]
+    Link --> Limit(["no level of grounding explains<br/>why this world rather than another"])
+```
+
+| Result | Theorem | What it shows |
+|---|---|---|
+| P10\* derived | `ultimacy_of_irreflexive_dissective` | Irreflexivity and dissectivity imply P10\*. For the conjunction of contingent facts, `total_fact_ultimacy` needs only irreflexivity, grounding of conjuncts, and factivity. |
+| Mathematics alone cannot ground reality | `mathematics_alone_cannot_ground` | From P2, P4, the production principle, and inertness alone. Mathematics cannot necessitate a contingent world, and being inert it has no other way to explain one. PSR-A, P10\*, and P3\* are not used. |
+| P3\* derived | `abstract_insufficiency_of_production` | Under P10\*, the ground does not necessitate $C$, so it has a productive member, which is not abstract. |
+| The derived argument | `derived_argument` | Modal non-selection, a productive, concrete, necessarily existing member, and non-necessitation, with neither P10\* nor P3\* assumed. |
+| Van Inwagen's lemma | `necessitating_fact_is_contingent` | Whatever actually obtains and necessitates a contingent $C$ is itself contingent. |
+| The link is contingent | `grounding_fact_contingent` | The fact that $G$ grounds $C$ is contingent, whatever $G$ is. |
+| Ground without grounding | `ground_obtains_without_grounding` | Under P10\*, in some accessible world every member of $G$ exists and $G$ does not ground $C$. |
+| The regress | `grounding_regress`, `no_level_settles_the_contrast` | If PSR-A covers grounding facts, there is a grounded contingent fact at every level, and at no level does the ground settle why its explanandum obtains rather than fails. |
+
+The new premises are consistent with a contingent world (`Models.derived_premises_satisfiable`), and so are the premises of the regress (`Models.indexed_premises_satisfiable`). Each one is needed: `Models.dropping_irreflexivity_countermodel`, `Models.dropping_dissectivity_countermodel`, `Models.dropping_production_countermodel`, and `Models.dropping_inertness_countermodel`. Two premises of the strengthened argument that had no countermodel now have one: `Models.dropping_self_access_countermodel` and `Models.dropping_factivity_strong_countermodel`.
+
+This revision removes two assumptions and adds one admission. Causal power now follows, although it need not be intellect or will. But anything that settles why this world obtains rather than another is contingent, so it lies outside the ultimate ground and inside what was to be explained. The argument explains that contingent actuality exists. It does not explain why this one does, and the appeal to "what could have been otherwise" that usually motivates PSR-A is exactly the demand it leaves unmet. The four finer premises remain premises, and the production principle is contested: it requires that some full grounds do not necessitate, against the orthodox view of ground.
+
 ## Starting points for non-theists
 
 Someone who does not believe in a God-like being can start from these principles instead of a blanket rejection. The theorems prove less than theism needs, and they state exactly what a non-theist has to hold. There are two kinds of starting point.
@@ -269,8 +311,8 @@ This reading has two costs. You must hold that some physical reality could not h
 | Starting point | Premise rejected | What you then hold | Lean model |
 |---|---|---|---|
 | Brute fact | PSR-A for the totality | The universe as a whole has no explanation. Explanation stops at the largest contingent fact. | `Models.dropping_PSR_strong_countermodel` |
-| Self-grounding universe | P10\*, ultimacy | The whole is explained by its own members, in a regress or a closed structure. | `Models.dropping_strong_nc_countermodel` |
-| Mathematical naturalism | P3\*, or P3 | Mathematics gives rise to physical reality, or simply is it. The abstract/concrete distinction must then be rebuilt. | `Models.dropping_AI_countermodel`, for P3\* |
+| Self-grounding universe | P10\*, ultimacy, by rejecting irreflexivity or dissectivity | The whole is explained by its own members: in a closed structure if irreflexivity is rejected, in a regress if dissectivity is. | `Models.dropping_irreflexivity_countermodel`, `Models.dropping_dissectivity_countermodel` |
+| Mathematical naturalism | P3\*, by rejecting production or inertness; or P3 | Mathematics gives rise to physical reality, or simply is it. The abstract/concrete distinction must then be rebuilt. | `Models.dropping_production_countermodel`, `Models.dropping_inertness_countermodel`, for P3\* |
 | Plenitude | P3 | Every possible world is concrete, and "actual" only marks our own. Why there is a plurality at all stays open. | none; P3 is a matter of interpretation |
 | Necessitarianism | P4, contingency | The universe could not have been otherwise. | `Models.dropping_contingency_allows_necessitation` |
 
@@ -289,7 +331,7 @@ flowchart LR
     Reader([Reader]) -->|"watch · listen"| Media[("media/<br/>film · essay")]
     Reader -->|read| Paper["the paper<br/>revised edition"]
     Orig[("source/<br/>first edition")] -->|"revised as"| Paper
-    Paper -->|"formal targets"| Lean{{"ActualityGround.lean<br/>40 theorems"}}
+    Paper -->|"formal targets"| Lean{{"ActualityGround.lean<br/>69 theorems"}}
     Lean --> Check["check.sh<br/>type-check<br/>build · audit"]
     Pins[("lean-toolchain<br/>lakefile.toml<br/>lake-manifest.json")] -->|pinned| Check
     Audit["Audit.lean"] --> Check
@@ -299,15 +341,15 @@ flowchart LR
 
 | Component | Role |
 |---|---|
-| [`actuality_and_necessary_ground.pdf`](actuality_and_necessary_ground.pdf) | The paper, revised edition of 28 October 2026 |
+| [`actuality_and_necessary_ground.pdf`](actuality_and_necessary_ground.pdf) | The paper, second revised edition of 13 November 2026 |
 | [`paper/actuality_and_necessary_ground.tex`](paper/actuality_and_necessary_ground.tex) | LaTeX source of the revised edition |
 | [`source/actuality_and_necessary_ground.pdf`](source/actuality_and_necessary_ground.pdf) | The first edition of 20 September 2026, unchanged; every verification run records its hash |
 | [`source/article_extracted.txt`](source/article_extracted.txt) | Page-labelled text extraction of the first edition |
-| [`ActualityGround.lean`](ActualityGround.lean) | The modal model, the 40 theorems, the models and countermodels, and the strengthened argument |
+| [`ActualityGround.lean`](ActualityGround.lean) | The modal model, the 69 theorems, the models and countermodels, the strengthened argument, and the derived premises |
 | [`Audit.lean`](Audit.lean) | Transitive axiom audit of every theorem |
 | [`check.sh`](check.sh) | One command: type-check, build, audit |
 | [`lean-toolchain`](lean-toolchain) · [`lakefile.toml`](lakefile.toml) · [`lake-manifest.json`](lake-manifest.json) | Pin Lean 4.19.0 and mathlib `c44e0c8…` |
-| [`compilation_output.txt`](compilation_output.txt) | Recorded run of 28 October 2026 |
+| [`compilation_output.txt`](compilation_output.txt) | Recorded run of 13 November 2026 |
 | [`REPORT.md`](REPORT.md) | Premises, scope, and models, stated precisely |
 | [`media/introduction.mp4`](media/introduction.mp4) | The introduction film, 7 minutes |
 | [`media/Why_Math_Cannot_Create_Physical_Reality_compressed.mp3`](media/Why_Math_Cannot_Create_Physical_Reality_compressed.mp3) | The spoken essay, 46 minutes |
@@ -358,9 +400,9 @@ Factivity is stated separately. A complete actual ground’s members actually ob
 
 The development also proves the boundaries. Possibility can hold without actuality. Drop contingency, and mathematical necessitation is consistent. Drop PSR, and brute contingent actuality has no ground. Drop P10, and only contingent grounds remain. Drop factivity, and a non-contingent ground may be impossible. The premises of the main theorem are jointly satisfiable, including with contingent effects. A necessary component can coexist with a collection that, taken as a whole, obtains contingently. An extra theological attribute can be false in a model of the premises.
 
-The strengthened results and their models are listed under [The strengthened argument](#the-strengthened-argument).
+The strengthened results and their models are listed under [The strengthened argument](#the-strengthened-argument), and the derivations of P10\* and P3\* under [Deriving the strengthened premises](#deriving-the-strengthened-premises).
 
-[`Audit.lean`](Audit.lean) checks the transitive axiom dependencies of all 40 theorems. Twenty-nine depend on no axioms. Eleven use only Lean’s `propext`, `Classical.choice`, and `Quot.sound`. There are no project axioms and no admitted proofs. The record of the 28 October 2026 run is in [`compilation_output.txt`](compilation_output.txt) and [`REPORT.md`](REPORT.md).
+[`Audit.lean`](Audit.lean) checks the transitive axiom dependencies of all 69 theorems. It also covers `GroundingLevel.brecOn`, the recursion lemma that Lean generates for that inductive definition, so it reports 70. Of the 69, fifty-two depend on no axioms. Seventeen use only Lean’s `propext`, `Classical.choice`, and `Quot.sound`. There are no project axioms and no admitted proofs. The record of the 13 November 2026 run is in [`compilation_output.txt`](compilation_output.txt) and [`REPORT.md`](REPORT.md).
 
 ## Reproduce
 
@@ -394,7 +436,7 @@ flowchart TD
     G1 -->|"error · warning"| Stop([stop · non-zero exit])
     G2 -->|"exit 0"| G3{"3 · axiom audit"}
     G2 -->|fail| Stop
-    G3 -->|"all 40 clean"| Pass([VERIFICATION PASSED])
+    G3 -->|"all 70 clean"| Pass([VERIFICATION PASSED])
     G3 -->|"axiom found<br/>or too few theorems"| Stop
 ```
 
@@ -402,7 +444,7 @@ flowchart TD
 |---|---|---|
 | 1 · type-check | `lake env lean -DwarningAsError=true ActualityGround.lean` | any error or warning |
 | 2 · build | `lake build` | the build fails |
-| 3 · axiom audit | `lake env lean -DwarningAsError=true Audit.lean` | the project declares an axiom, a theorem depends on an axiom other than `propext`, `Classical.choice`, or `Quot.sound`, or fewer than 40 theorems are found |
+| 3 · axiom audit | `lake env lean -DwarningAsError=true Audit.lean` | the project declares an axiom, a theorem depends on an axiom other than `propext`, `Classical.choice`, or `Quot.sound`, or fewer than 70 theorems are found (the 69 stated ones and one generated recursion lemma) |
 
 The paper is built from [`paper/actuality_and_necessary_ground.tex`](paper/actuality_and_necessary_ground.tex) with pdflatex. Run the second command three times so the contents and cross-references settle:
 

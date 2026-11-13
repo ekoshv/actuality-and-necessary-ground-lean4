@@ -5,6 +5,8 @@ import Lean.Util.CollectAxioms
 This command inspects the kernel environment of the built module, traverses
 every theorem's transitive dependencies, and fails on any nonstandard axiom.
 It also rejects any axiom declaration in our namespace, used or unused.
+The count is the 69 stated theorems plus `GroundingLevel.brecOn`, the
+recursion lemma that Lean generates for that inductive definition.
 The command does not construct proofs or assert new propositions.
 -/
 
@@ -25,6 +27,6 @@ run_cmd do
           unless allowed.contains dependency do
             throwError "Forbidden axiom {dependency} in theorem {name}"
       | _ => pure ()
-  if count < 40 then
-    throwError "Expected at least 40 audited theorems, found {count}"
+  if count < 70 then
+    throwError "Expected at least 70 audited theorems, found {count}"
   logInfo m!"PASS: audited all {count} theorems in ActualityGround; no project axioms or admitted-proof dependencies. Allowed foundations: propext, Classical.choice, Quot.sound."

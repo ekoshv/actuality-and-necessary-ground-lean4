@@ -1,4 +1,4 @@
-UTC verification time: 2026-10-28T09:48:37Z
+UTC verification time: 2026-11-13T20:18:56Z
 
 Pinned toolchain:
 leanprover/lean4:v4.19.0
@@ -10,8 +10,8 @@ Dependency revision:
 c44e0c8ee63ca166450922a373c7409c5d26b00b
 
 Source hashes:
-3d39f7b48d544560c470fc1185f6efe63f33d5459a7ab04321949c2458e8bff7  ActualityGround.lean
-939e1a7a491057e1026a5f62747bd1a76e814a90aa4404af268b72d0c0548ab9  Audit.lean
+e13cc60a6ee96b9dce8fd70c2467b2b8c5d6718170abf765b5b01f3e061cb41b  ActualityGround.lean
+2458698b7eae1c3c6181484d65189925f8aa4b593cb80d809867551ac29a3cd0  Audit.lean
 f14982c45d9c503fe09a246e646366bf94dc5ce9b28c6fcdc10dff6b4f678a64  lakefile.toml
 55e97be96000b5e9e290c9e74482e5e317861499a5540353ce845471bded8cea  lean-toolchain
 08341dfd71ddf68654bd8145082b4a840b3f3cfc64562ed68eb59e1207122cd3  lake-manifest.json
@@ -58,55 +58,113 @@ COMMAND: lake env lean -DwarningAsError=true ActualityGround.lean
 'ActualityGround.Models.dropping_strong_nc_countermodel' does not depend on any axioms
 'ActualityGround.Models.dropping_PSR_strong_countermodel' does not depend on any axioms
 'ActualityGround.Models.strengthened_ground_need_not_be_personal' does not depend on any axioms
+'ActualityGround.ultimacy_of_irreflexive_dissective' does not depend on any axioms
+'ActualityGround.total_fact_dissective' does not depend on any axioms
+'ActualityGround.total_fact_ultimacy' does not depend on any axioms
+'ActualityGround.necessary_collection_does_not_necessitate' does not depend on any axioms
+'ActualityGround.inert_necessities_cannot_ground' does not depend on any axioms
+'ActualityGround.mathematics_alone_cannot_ground' does not depend on any axioms
+'ActualityGround.productive_member_of_ultimate_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ActualityGround.abstract_insufficiency_of_production' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ActualityGround.necessary_productive_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ActualityGround.derived_argument' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ActualityGround.necessitating_fact_is_contingent' does not depend on any axioms
+'ActualityGround.grounding_fact_necessitates' does not depend on any axioms
+'ActualityGround.grounding_fact_contingent' does not depend on any axioms
+'ActualityGround.ground_obtains_without_grounding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ActualityGround.grounding_level_contingent' does not depend on any axioms
+'ActualityGround.grounding_regress' does not depend on any axioms
+'ActualityGround.no_level_settles_the_contrast' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ActualityGround.Models.dropping_self_access_countermodel' does not depend on any axioms
+'ActualityGround.Models.dropping_factivity_strong_countermodel' does not depend on any axioms
+'ActualityGround.Models.fullGround_not_irreflexive' does not depend on any axioms
+'ActualityGround.Models.strictGround_psr' does not depend on any axioms
+'ActualityGround.Models.strictGround_factive' does not depend on any axioms
+'ActualityGround.Models.strictGround_members_necessary' does not depend on any axioms
+'ActualityGround.Models.derived_premises_satisfiable' does not depend on any axioms
+'ActualityGround.Models.indexed_premises_satisfiable' does not depend on any axioms
+'ActualityGround.Models.dropping_irreflexivity_countermodel' does not depend on any axioms
+'ActualityGround.Models.dropping_dissectivity_countermodel' does not depend on any axioms
+'ActualityGround.Models.dropping_production_countermodel' does not depend on any axioms
+'ActualityGround.Models.dropping_inertness_countermodel' does not depend on any axioms
 Source type-check exit code: 0
 
 COMMAND: lake build
-ℹ [325/326] Built ActualityGround
-info: ././././ActualityGround.lean:719:0: 'ActualityGround.box_modus_ponens' does not depend on any axioms
-info: ././././ActualityGround.lean:720:0: 'ActualityGround.contingent_not_necessary' does not depend on any axioms
-info: ././././ActualityGround.lean:721:0: 'ActualityGround.modal_non_selection' does not depend on any axioms
-info: ././././ActualityGround.lean:722:0: 'ActualityGround.necessary_ground_cannot_necessitate_contingent_effect' does not depend on any axioms
-info: ././././ActualityGround.lean:723:0: 'ActualityGround.necessary_of_actual_noncontingent' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:724:0: 'ActualityGround.noncontingent_component_of_complete_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:725:0: 'ActualityGround.noncontingent_ground_consequence' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:726:0: 'ActualityGround.necessary_ground_consequence' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:727:0: 'ActualityGround.refined_argument' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:728:0: 'ActualityGround.total_fact_actual' does not depend on any axioms
-info: ././././ActualityGround.lean:729:0: 'ActualityGround.total_fact_contingent' does not depend on any axioms
-info: ././././ActualityGround.lean:730:0: 'ActualityGround.represented_totality_necessary_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:731:0: 'ActualityGround.Models.sometimes_contingent' does not depend on any axioms
-info: ././././ActualityGround.lean:732:0: 'ActualityGround.Models.sometimes_not_necessary' does not depend on any axioms
-info: ././././ActualityGround.lean:733:0: 'ActualityGround.Models.always_not_contingent' does not depend on any axioms
-info: ././././ActualityGround.lean:734:0: 'ActualityGround.Models.possibility_does_not_imply_actuality' does not depend on any axioms
-info: ././././ActualityGround.lean:735:0: 'ActualityGround.Models.dropping_contingency_allows_necessitation' does not depend on any axioms
-info: ././././ActualityGround.lean:736:0: 'ActualityGround.Models.groundExists_psr' does not depend on any axioms
-info: ././././ActualityGround.lean:737:0: 'ActualityGround.Models.dropping_P10_countermodel' does not depend on any axioms
-info: ././././ActualityGround.lean:738:0: 'ActualityGround.Models.dropping_PSR_countermodel' does not depend on any axioms
-info: ././././ActualityGround.lean:739:0: 'ActualityGround.Models.dropping_factivity_countermodel' does not depend on any axioms
-info: ././././ActualityGround.lean:740:0: 'ActualityGround.Models.joint_premises_satisfiable' does not depend on any axioms
-info: ././././ActualityGround.lean:741:0: 'ActualityGround.Models.extra_attribute_not_entailed' does not depend on any axioms
-info: ././././ActualityGround.lean:742:0: 'ActualityGround.Models.necessary_component_not_necessary_collection' does not depend on any axioms
-info: ././././ActualityGround.lean:743:0: 'ActualityGround.Models.represented_totality_premises_satisfiable' does not depend on any axioms
-info: ././././ActualityGround.lean:744:0: 'ActualityGround.strengthened_premises_imply_P10' does not depend on any axioms
-info: ././././ActualityGround.lean:745:0: 'ActualityGround.necessary_concrete_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:746:0: 'ActualityGround.ground_obtains_where_C_fails' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:747:0: 'ActualityGround.ground_does_not_necessitate' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:748:0: 'ActualityGround.brute_fact_or_noncontingent_concretum' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:749:0: 'ActualityGround.abstract_necessity_alone_cannot_ground' does not depend on any axioms
-info: ././././ActualityGround.lean:750:0: 'ActualityGround.strengthened_argument' depends on axioms: [propext, Classical.choice, Quot.sound]
-info: ././././ActualityGround.lean:751:0: 'ActualityGround.Models.necessary_items_not_contingent' does not depend on any axioms
-info: ././././ActualityGround.lean:752:0: 'ActualityGround.Models.worldFact_contingent' does not depend on any axioms
-info: ././././ActualityGround.lean:753:0: 'ActualityGround.Models.original_P10_met_by_mathematics' does not depend on any axioms
-info: ././././ActualityGround.lean:754:0: 'ActualityGround.Models.strengthened_premises_satisfiable' does not depend on any axioms
-info: ././././ActualityGround.lean:755:0: 'ActualityGround.Models.dropping_AI_countermodel' does not depend on any axioms
-info: ././././ActualityGround.lean:756:0: 'ActualityGround.Models.dropping_strong_nc_countermodel' does not depend on any axioms
-info: ././././ActualityGround.lean:757:0: 'ActualityGround.Models.dropping_PSR_strong_countermodel' does not depend on any axioms
-info: ././././ActualityGround.lean:758:0: 'ActualityGround.Models.strengthened_ground_need_not_be_personal' does not depend on any axioms
+ℹ [325/326] Replayed ActualityGround
+info: ././././ActualityGround.lean:1311:0: 'ActualityGround.box_modus_ponens' does not depend on any axioms
+info: ././././ActualityGround.lean:1312:0: 'ActualityGround.contingent_not_necessary' does not depend on any axioms
+info: ././././ActualityGround.lean:1313:0: 'ActualityGround.modal_non_selection' does not depend on any axioms
+info: ././././ActualityGround.lean:1314:0: 'ActualityGround.necessary_ground_cannot_necessitate_contingent_effect' does not depend on any axioms
+info: ././././ActualityGround.lean:1315:0: 'ActualityGround.necessary_of_actual_noncontingent' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1316:0: 'ActualityGround.noncontingent_component_of_complete_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1317:0: 'ActualityGround.noncontingent_ground_consequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1318:0: 'ActualityGround.necessary_ground_consequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1319:0: 'ActualityGround.refined_argument' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1320:0: 'ActualityGround.total_fact_actual' does not depend on any axioms
+info: ././././ActualityGround.lean:1321:0: 'ActualityGround.total_fact_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1322:0: 'ActualityGround.represented_totality_necessary_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1323:0: 'ActualityGround.Models.sometimes_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1324:0: 'ActualityGround.Models.sometimes_not_necessary' does not depend on any axioms
+info: ././././ActualityGround.lean:1325:0: 'ActualityGround.Models.always_not_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1326:0: 'ActualityGround.Models.possibility_does_not_imply_actuality' does not depend on any axioms
+info: ././././ActualityGround.lean:1327:0: 'ActualityGround.Models.dropping_contingency_allows_necessitation' does not depend on any axioms
+info: ././././ActualityGround.lean:1328:0: 'ActualityGround.Models.groundExists_psr' does not depend on any axioms
+info: ././././ActualityGround.lean:1329:0: 'ActualityGround.Models.dropping_P10_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1330:0: 'ActualityGround.Models.dropping_PSR_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1331:0: 'ActualityGround.Models.dropping_factivity_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1332:0: 'ActualityGround.Models.joint_premises_satisfiable' does not depend on any axioms
+info: ././././ActualityGround.lean:1333:0: 'ActualityGround.Models.extra_attribute_not_entailed' does not depend on any axioms
+info: ././././ActualityGround.lean:1334:0: 'ActualityGround.Models.necessary_component_not_necessary_collection' does not depend on any axioms
+info: ././././ActualityGround.lean:1335:0: 'ActualityGround.Models.represented_totality_premises_satisfiable' does not depend on any axioms
+info: ././././ActualityGround.lean:1336:0: 'ActualityGround.strengthened_premises_imply_P10' does not depend on any axioms
+info: ././././ActualityGround.lean:1337:0: 'ActualityGround.necessary_concrete_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1338:0: 'ActualityGround.ground_obtains_where_C_fails' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1339:0: 'ActualityGround.ground_does_not_necessitate' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1340:0: 'ActualityGround.brute_fact_or_noncontingent_concretum' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1341:0: 'ActualityGround.abstract_necessity_alone_cannot_ground' does not depend on any axioms
+info: ././././ActualityGround.lean:1342:0: 'ActualityGround.strengthened_argument' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1343:0: 'ActualityGround.Models.necessary_items_not_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1344:0: 'ActualityGround.Models.worldFact_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1345:0: 'ActualityGround.Models.original_P10_met_by_mathematics' does not depend on any axioms
+info: ././././ActualityGround.lean:1346:0: 'ActualityGround.Models.strengthened_premises_satisfiable' does not depend on any axioms
+info: ././././ActualityGround.lean:1347:0: 'ActualityGround.Models.dropping_AI_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1348:0: 'ActualityGround.Models.dropping_strong_nc_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1349:0: 'ActualityGround.Models.dropping_PSR_strong_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1350:0: 'ActualityGround.Models.strengthened_ground_need_not_be_personal' does not depend on any axioms
+info: ././././ActualityGround.lean:1351:0: 'ActualityGround.ultimacy_of_irreflexive_dissective' does not depend on any axioms
+info: ././././ActualityGround.lean:1352:0: 'ActualityGround.total_fact_dissective' does not depend on any axioms
+info: ././././ActualityGround.lean:1353:0: 'ActualityGround.total_fact_ultimacy' does not depend on any axioms
+info: ././././ActualityGround.lean:1354:0: 'ActualityGround.necessary_collection_does_not_necessitate' does not depend on any axioms
+info: ././././ActualityGround.lean:1355:0: 'ActualityGround.inert_necessities_cannot_ground' does not depend on any axioms
+info: ././././ActualityGround.lean:1356:0: 'ActualityGround.mathematics_alone_cannot_ground' does not depend on any axioms
+info: ././././ActualityGround.lean:1357:0: 'ActualityGround.productive_member_of_ultimate_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1358:0: 'ActualityGround.abstract_insufficiency_of_production' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1359:0: 'ActualityGround.necessary_productive_ground' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1360:0: 'ActualityGround.derived_argument' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1361:0: 'ActualityGround.necessitating_fact_is_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1362:0: 'ActualityGround.grounding_fact_necessitates' does not depend on any axioms
+info: ././././ActualityGround.lean:1363:0: 'ActualityGround.grounding_fact_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1364:0: 'ActualityGround.ground_obtains_without_grounding' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1365:0: 'ActualityGround.grounding_level_contingent' does not depend on any axioms
+info: ././././ActualityGround.lean:1366:0: 'ActualityGround.grounding_regress' does not depend on any axioms
+info: ././././ActualityGround.lean:1367:0: 'ActualityGround.no_level_settles_the_contrast' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: ././././ActualityGround.lean:1368:0: 'ActualityGround.Models.dropping_self_access_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1369:0: 'ActualityGround.Models.dropping_factivity_strong_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1370:0: 'ActualityGround.Models.fullGround_not_irreflexive' does not depend on any axioms
+info: ././././ActualityGround.lean:1371:0: 'ActualityGround.Models.strictGround_psr' does not depend on any axioms
+info: ././././ActualityGround.lean:1372:0: 'ActualityGround.Models.strictGround_factive' does not depend on any axioms
+info: ././././ActualityGround.lean:1373:0: 'ActualityGround.Models.strictGround_members_necessary' does not depend on any axioms
+info: ././././ActualityGround.lean:1374:0: 'ActualityGround.Models.derived_premises_satisfiable' does not depend on any axioms
+info: ././././ActualityGround.lean:1375:0: 'ActualityGround.Models.indexed_premises_satisfiable' does not depend on any axioms
+info: ././././ActualityGround.lean:1376:0: 'ActualityGround.Models.dropping_irreflexivity_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1377:0: 'ActualityGround.Models.dropping_dissectivity_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1378:0: 'ActualityGround.Models.dropping_production_countermodel' does not depend on any axioms
+info: ././././ActualityGround.lean:1379:0: 'ActualityGround.Models.dropping_inertness_countermodel' does not depend on any axioms
 Build completed successfully.
 Build exit code: 0
 
 COMMAND: lake env lean -DwarningAsError=true Audit.lean
-PASS: audited all 40 theorems in ActualityGround; no project axioms or admitted-proof dependencies. Allowed foundations: propext, Classical.choice, Quot.sound.
+PASS: audited all 70 theorems in ActualityGround; no project axioms or admitted-proof dependencies. Allowed foundations: propext, Classical.choice, Quot.sound.
 Dependency audit exit code: 0
 
 VERIFICATION PASSED

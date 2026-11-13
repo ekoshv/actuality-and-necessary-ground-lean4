@@ -6,8 +6,12 @@ import Mathlib.Data.Set.Basic
 Source: `actuality_and_necessary_ground.pdf`, 20 September 2026, 16 pages.
 The formal targets are Proposition 1 (p. 5), Proposition 2 (p. 6),
 the twelve steps (p. 12), and the modal-collapse objection (p. 10).
-A final section strengthens the argument with two premises that are not in
+A further section strengthens the argument with two premises that are not in
 the source, P10* and P3*, and proves what they add and what they cost.
+The last part derives P10* and P3* from finer premises (irreflexivity,
+dissectivity, a production principle, inertness of abstract entities) and
+indexes grounding to evaluations, so that the grounding fact is itself a
+proposition.
 
 All philosophical principles are explicit arguments of the theorems below.
 In particular, PSR and the exclusion of wholly contingent complete grounds
@@ -712,6 +716,594 @@ theorem strengthened_ground_need_not_be_personal :
 
 end Models
 
+/-! ## Deriving the strengthened premises
+
+P10* and P3* are close to the conclusion they support. This part replaces
+each by finer premises and proves it from them.
+
+* P10* follows from irreflexivity of ground together with dissectivity: a
+  complete ground of the totality also grounds the obtaining of each of its
+  own contingent members, since that obtaining belongs to the totality.
+* P3* follows from a production principle together with the inertness of
+  abstract entities. The step uses the modal core: a ground whose members are
+  all necessary cannot necessitate a contingent fact, so it can explain that
+  fact only through productive power.
+
+A third section indexes grounding to evaluations. The fact that `G` grounds
+`C` is then itself contingent, and applying PSR to it starts a regress in
+which no level explains why `C` obtains rather than fails.
+-/
+
+section Derived
+
+variable {World : Type u} {Entity : Type v}
+
+/-- Irreflexivity of ground: no collection grounds the obtaining of one of
+    its own members. Every member of a ground is taken to contribute, so a
+    ground containing `g` would use `g` to explain `g`. -/
+def GroundIrreflexive (holds : Entity → WProp World)
+    (grounds : Set Entity → WProp World → Prop) : Prop :=
+  ∀ G, ∀ g ∈ G, ¬ grounds G (holds g)
+
+/-- Dissectivity for `C`: a complete ground of the totality also grounds the
+    obtaining of each contingent member of that ground. This is the article's
+    rationale for P10, that such a member's "own actuality remains within what
+    was to be explained", stated as a premise. A regress theorist denies it:
+    each member is explained by other members, never by the whole ground. -/
+def Dissective (R : World → World → Prop)
+    (holds : Entity → WProp World) (w : World)
+    (grounds : Set Entity → WProp World → Prop) (C : WProp World) : Prop :=
+  ∀ G, grounds G C → ∀ g ∈ G, Contingent R (holds g) w → grounds G (holds g)
+
+/-- For the conjunction model of the totality: a complete ground of the total
+    fact grounds each of its conjuncts. -/
+def GroundsConjuncts (R : World → World → Prop)
+    (holds : Entity → WProp World) (w : World)
+    (grounds : Set Entity → WProp World → Prop) : Prop :=
+  ∀ G, grounds G (TotalFact R holds w) →
+    ∀ e, holds e w → Contingent R (holds e) w → grounds G (holds e)
+
+variable {R : World → World → Prop} {holds : Entity → WProp World}
+variable {w : World} {grounds : Set Entity → WProp World → Prop}
+variable {concrete : WProp World → Prop} {concreteE : Entity → Prop}
+variable {productive : Entity → Prop} {C : WProp World}
+
+/-- P10* is a theorem of irreflexivity and dissectivity. -/
+theorem ultimacy_of_irreflexive_dissective
+    (hirr : GroundIrreflexive holds grounds)
+    (hdis : Dissective R holds w grounds C) :
+    NoContingentMember R holds w grounds C := by
+  intro G hG g hg hc
+  exact hirr G g hg (hdis G hG g hg hc)
+
+/-- In the conjunction model, dissectivity follows from grounding of
+    conjuncts and factivity: a contingent member of an actual ground is an
+    actual contingent fact, hence a conjunct of the total fact. -/
+theorem total_fact_dissective
+    (hconj : GroundsConjuncts R holds w grounds)
+    (hfactive : GroundFactivity w holds grounds) :
+    Dissective R holds w grounds (TotalFact R holds w) := by
+  intro G hG g hg hc
+  exact hconj G hG g ((hfactive G _ hG).2 g hg) hc
+
+/-- Hence P10* holds for the represented total fact without being assumed. -/
+theorem total_fact_ultimacy
+    (hirr : GroundIrreflexive holds grounds)
+    (hconj : GroundsConjuncts R holds w grounds)
+    (hfactive : GroundFactivity w holds grounds) :
+    NoContingentMember R holds w grounds (TotalFact R holds w) :=
+  ultimacy_of_irreflexive_dissective hirr (total_fact_dissective hconj hfactive)
+
+/-- Production principle: a complete ground that does not necessitate what
+    it grounds has a member with productive power. Explanation without
+    entailment is taken to need something that brings its effect about, as a
+    chancy process or an agent does. -/
+def NonNecessitatingGroundsProduce (R : World → World → Prop)
+    (holds : Entity → WProp World) (w : World)
+    (productive : Entity → Prop)
+    (grounds : Set Entity → WProp World → Prop) : Prop :=
+  ∀ G p, grounds G p →
+    ¬ Box R (fun v => (∀ g ∈ G, holds g v) → p v) w → ∃ g ∈ G, productive g
+
+/-- The modal core for collections: necessarily obtaining members cannot
+    jointly necessitate a contingent fact. -/
+theorem necessary_collection_does_not_necessitate
+    {G : Set Entity} (hnec : ∀ g ∈ G, Box R (holds g) w)
+    (hCcont : Contingent R C w) :
+    ¬ Box R (fun v => (∀ g ∈ G, holds g v) → C v) w := by
+  intro hbox
+  obtain ⟨v, hv, hnC⟩ := hCcont.2
+  exact hnC (hbox v hv (fun g hg => hnec g hg v hv))
+
+/-- A collection of necessary, unproductive entities grounds no contingent
+    fact. Neither PSR, ultimacy, nor abstract insufficiency is used. -/
+theorem inert_necessities_cannot_ground
+    (hCcont : Contingent R C w)
+    (hPP : NonNecessitatingGroundsProduce R holds w productive grounds)
+    {G : Set Entity} (hnec : ∀ g ∈ G, Box R (holds g) w)
+    (hinert : ∀ g ∈ G, ¬ productive g) : ¬ grounds G C := by
+  intro hG
+  obtain ⟨g, hg, hp⟩ :=
+    hPP G C hG (necessary_collection_does_not_necessitate hnec hCcont)
+  exact hinert g hg hp
+
+/-- Mathematics alone cannot ground contingent actuality. The premises are
+    P2 and P4, the production principle, and the inertness of mathematical
+    entities. The modal core does the work: mathematics cannot necessitate
+    `C`, and it has no other way to explain it. -/
+theorem mathematics_alone_cannot_ground
+    {mathematical : Entity → Prop}
+    (hmathNec : ∀ g, mathematical g → Box R (holds g) w)
+    (hmathInert : ∀ g, mathematical g → ¬ productive g)
+    (hCcont : Contingent R C w)
+    (hPP : NonNecessitatingGroundsProduce R holds w productive grounds)
+    {G : Set Entity} (hGmath : ∀ g ∈ G, mathematical g) : ¬ grounds G C :=
+  inert_necessities_cannot_ground hCcont hPP
+    (fun g hg => hmathNec g (hGmath g hg))
+    (fun g hg => hmathInert g (hGmath g hg))
+
+/-- Under ultimacy, every complete ground of a contingent `C` has a
+    productive member, because it does not necessitate `C`. -/
+theorem productive_member_of_ultimate_ground
+    (hrefl : R w w) (hCcont : Contingent R C w)
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hfactive : GroundFactivity w holds grounds)
+    (hPP : NonNecessitatingGroundsProduce R holds w productive grounds)
+    {G : Set Entity} (hG : grounds G C) : ∃ g ∈ G, productive g :=
+  hPP G C hG (ground_does_not_necessitate hrefl hCcont hstrong hfactive hG)
+
+/-- P3* is a theorem of the production principle and the inertness of
+    abstract entities, here in the form that whatever is productive is
+    concrete. -/
+theorem abstract_insufficiency_of_production
+    (hrefl : R w w) (hCcont : Contingent R C w)
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hfactive : GroundFactivity w holds grounds)
+    (hPP : NonNecessitatingGroundsProduce R holds w productive grounds)
+    (hinert : ∀ g, productive g → concreteE g) :
+    AbstractInsufficiency concreteE grounds C := by
+  intro G hG
+  obtain ⟨g, hg, hp⟩ :=
+    productive_member_of_ultimate_ground hrefl hCcont hstrong hfactive hPP hG
+  exact ⟨g, hg, hinert g hp⟩
+
+/-- Some complete ground of `C` has a member that is productive, concrete,
+    and necessarily existing. Causal power is no longer left open. -/
+theorem necessary_productive_ground
+    (hrefl : R w w) (hCactual : C w) (hCcont : Contingent R C w)
+    (hCconcrete : concrete C)
+    (hPSR : RestrictedPSR R w concrete grounds)
+    (hstrong : NoContingentMember R holds w grounds C)
+    (hfactive : GroundFactivity w holds grounds)
+    (hPP : NonNecessitatingGroundsProduce R holds w productive grounds)
+    (hinert : ∀ g, productive g → concreteE g) :
+    ∃ G, grounds G C ∧
+      ∃ g ∈ G, productive g ∧ concreteE g ∧ holds g w ∧ Box R (holds g) w := by
+  obtain ⟨G, hG⟩ := hPSR C hCconcrete hCactual hCcont
+  obtain ⟨g, hg, hp⟩ :=
+    productive_member_of_ultimate_ground hrefl hCcont hstrong hfactive hPP hG
+  have hactual := (hfactive G C hG).2 g hg
+  exact ⟨G, hG, g, hg, hp, hinert g hp, hactual,
+    necessary_of_actual_noncontingent hrefl hactual (hstrong G hG g hg)⟩
+
+/-- The argument with P10* and P3* derived, not assumed. From contingency,
+    PSR-A, irreflexivity, dissectivity, factivity, the production principle,
+    and inertness: mathematics alone does not necessitate `C`, some complete
+    ground of `C` has a productive, concrete, necessarily existing member,
+    and that ground does not necessitate `C`. -/
+theorem derived_argument
+    {N : WProp World} (hN : Box R N w)
+    (hrefl : R w w) (hCactual : C w) (hCcont : Contingent R C w)
+    (hCconcrete : concrete C)
+    (hPSR : RestrictedPSR R w concrete grounds)
+    (hirr : GroundIrreflexive holds grounds)
+    (hdis : Dissective R holds w grounds C)
+    (hfactive : GroundFactivity w holds grounds)
+    (hPP : NonNecessitatingGroundsProduce R holds w productive grounds)
+    (hinert : ∀ g, productive g → concreteE g) :
+    (¬ Box R (fun v => N v → C v) w) ∧
+    ∃ G, grounds G C ∧
+      (∃ g ∈ G, productive g ∧ concreteE g ∧ holds g w ∧ Box R (holds g) w) ∧
+      ¬ Box R (fun v => (∀ g ∈ G, holds g v) → C v) w := by
+  have hstrong := ultimacy_of_irreflexive_dissective hirr hdis
+  obtain ⟨G, hG⟩ := hPSR C hCconcrete hCactual hCcont
+  obtain ⟨g, hg, hp⟩ :=
+    productive_member_of_ultimate_ground hrefl hCcont hstrong hfactive hPP hG
+  have hactual := (hfactive G C hG).2 g hg
+  exact ⟨modal_non_selection hN hCcont, G, hG,
+    ⟨g, hg, hp, hinert g hp, hactual,
+      necessary_of_actual_noncontingent hrefl hactual (hstrong G hG g hg)⟩,
+    ground_does_not_necessitate hrefl hCcont hstrong hfactive hG⟩
+
+end Derived
+
+/-! ## Grounding indexed to evaluations
+
+So far `grounds G C` has been a single fact about the actual evaluation.
+Here `groundsAt v G p` says that `G` grounds `p` at `v`, so the grounding
+fact `fun v => groundsAt v G C` is a proposition like any other.
+-/
+
+section Indexed
+
+variable {World : Type u} {Entity : Type v}
+
+/-- Factivity at every accessible evaluation. -/
+def FactiveAt (R : World → World → Prop) (w : World)
+    (holds : Entity → WProp World)
+    (groundsAt : World → Set Entity → WProp World → Prop) : Prop :=
+  ∀ v, R w v → ∀ G p, groundsAt v G p → p v ∧ ∀ g ∈ G, holds g v
+
+/-- The hierarchy of grounding facts over `C`. Level 0 is `C`; a fact of
+    level `n + 1` says that some `G` grounds a fact of level `n` which it
+    actually grounds. -/
+inductive GroundingLevel
+    (groundsAt : World → Set Entity → WProp World → Prop)
+    (w : World) (C : WProp World) : Nat → WProp World → Prop
+  | base : GroundingLevel groundsAt w C 0 C
+  | step {n : Nat} {p : WProp World} {G : Set Entity} :
+      GroundingLevel groundsAt w C n p → groundsAt w G p →
+      GroundingLevel groundsAt w C (n + 1) (fun v => groundsAt v G p)
+
+variable {R : World → World → Prop} {holds : Entity → WProp World}
+variable {w : World} {groundsAt : World → Set Entity → WProp World → Prop}
+variable {concrete : WProp World → Prop} {C : WProp World}
+
+/-- Van Inwagen's lemma. Whatever actually obtains and necessitates a
+    contingent fact is itself contingent. So anything that settles why `C`
+    obtains rather than fails, such as a choice or a chance outcome, is a
+    contingent fact, and by ultimacy lies outside the ultimate ground. -/
+theorem necessitating_fact_is_contingent {q : WProp World}
+    (hrefl : R w w) (hq : q w)
+    (hnec : Box R (fun v => q v → C v) w) (hCcont : Contingent R C w) :
+    Contingent R q w := by
+  obtain ⟨v, hv, hnC⟩ := hCcont.2
+  exact ⟨⟨w, hrefl, hq⟩, v, hv, fun hqv => hnC (hnec v hv hqv)⟩
+
+/-- By factivity, the grounding fact necessitates what is grounded. -/
+theorem grounding_fact_necessitates
+    (hf : FactiveAt R w holds groundsAt) (G : Set Entity) :
+    Box R (fun v => groundsAt v G C → C v) w := by
+  intro v hv hG
+  exact (hf v hv G C hG).1
+
+/-- The fact that `G` grounds a contingent `C` is itself contingent,
+    whatever `G` is. No ultimacy premise is used. -/
+theorem grounding_fact_contingent
+    (hrefl : R w w) (hf : FactiveAt R w holds groundsAt)
+    (hCcont : Contingent R C w) {G : Set Entity} (hG : groundsAt w G C) :
+    Contingent R (fun v => groundsAt v G C) w :=
+  necessitating_fact_is_contingent (q := fun v => groundsAt v G C)
+    hrefl hG (grounding_fact_necessitates hf G) hCcont
+
+/-- Under ultimacy there is an accessible evaluation at which every member
+    of the ground obtains and yet the ground does not ground `C`. The
+    difference between that evaluation and the actual one lies wholly in the
+    grounding fact, not in the ground. -/
+theorem ground_obtains_without_grounding
+    (hrefl : R w w) (hCcont : Contingent R C w)
+    (hstrong : NoContingentMember R holds w (groundsAt w) C)
+    (hf : FactiveAt R w holds groundsAt)
+    {G : Set Entity} (hG : groundsAt w G C) :
+    ∃ v, R w v ∧ (∀ g ∈ G, holds g v) ∧ ¬ groundsAt v G C := by
+  obtain ⟨v, hv, hnC, hall⟩ :=
+    ground_obtains_where_C_fails hrefl hCcont hstrong (hf w hrefl) hG
+  exact ⟨v, hv, hall, fun hGv => hnC (hf v hv G C hGv).1⟩
+
+/-- Every fact in the hierarchy actually obtains and is contingent. -/
+theorem grounding_level_contingent
+    (hrefl : R w w) (hf : FactiveAt R w holds groundsAt)
+    (hCactual : C w) (hCcont : Contingent R C w)
+    {n : Nat} {p : WProp World} (h : GroundingLevel groundsAt w C n p) :
+    p w ∧ Contingent R p w := by
+  induction h with
+  | base => exact ⟨hCactual, hCcont⟩
+  | step _ hG ih => exact ⟨hG, grounding_fact_contingent hrefl hf ih.2 hG⟩
+
+/-- The regress. If grounding facts fall under PSR, the hierarchy has a
+    grounded, actual, contingent fact at every level. Propositions here are
+    individuated by the evaluations at which they hold, so the levels need
+    not be distinct facts; the regress may be a fixed point. -/
+theorem grounding_regress
+    (hrefl : R w w) (hf : FactiveAt R w holds groundsAt)
+    (hPSR : RestrictedPSR R w concrete (groundsAt w))
+    (hclosed : ∀ G p, concrete p → concrete (fun v => groundsAt v G p))
+    (hCactual : C w) (hCcont : Contingent R C w) (hCconcrete : concrete C) :
+    ∀ n, ∃ p, GroundingLevel groundsAt w C n p ∧ concrete p ∧
+      p w ∧ Contingent R p w := by
+  intro n
+  induction n with
+  | zero => exact ⟨C, .base, hCconcrete, hCactual, hCcont⟩
+  | succ n ih =>
+    obtain ⟨p, hlevel, hpc, hpw, hpcont⟩ := ih
+    obtain ⟨G, hG⟩ := hPSR p hpc hpw hpcont
+    exact ⟨fun v => groundsAt v G p, .step hlevel hG, hclosed G p hpc, hG,
+      grounding_fact_contingent hrefl hf hpcont hG⟩
+
+/-- If ultimacy holds at every level, no level settles the contrast: each
+    ground still obtains at an accessible evaluation where the fact it
+    grounds fails. Ascending the hierarchy never yields an explanation of
+    why `C` obtains rather than fails. -/
+theorem no_level_settles_the_contrast
+    (hrefl : R w w) (hf : FactiveAt R w holds groundsAt)
+    (hCactual : C w) (hCcont : Contingent R C w)
+    (hult : ∀ n p, GroundingLevel groundsAt w C n p →
+      NoContingentMember R holds w (groundsAt w) p)
+    {n : Nat} {p : WProp World} {G : Set Entity}
+    (hlevel : GroundingLevel groundsAt w C n p) (hG : groundsAt w G p) :
+    ∃ v, R w v ∧ ¬ p v ∧ ∀ g ∈ G, holds g v :=
+  ground_obtains_where_C_fails hrefl
+    (grounding_level_contingent hrefl hf hCactual hCcont hlevel).2
+    (hult n p hlevel) (hf w hrefl) hG
+
+end Indexed
+
+/-! ## Models for the derived premises -/
+
+namespace Models
+
+/-! ### Two premises whose necessity was not yet shown -/
+
+/-- Three evaluations. The actual one, `none`, accesses the other two but
+    not itself. -/
+def noSelfAccess (_ v : Option Bool) : Prop := v ≠ none
+def actualOnly (_ : Unit) (w : Option Bool) : Prop := w = none
+def openFact (w : Option Bool) : Prop := w ≠ some false
+def actualGround (G : Set Unit) (p : WProp (Option Bool)) : Prop := p none ∧ G ()
+
+/-- Self-access is essential. Without it every other premise of
+    `necessary_concrete_ground` holds, the one candidate obtains only at the
+    actual evaluation, and so is non-contingent without being necessary. -/
+theorem dropping_self_access_countermodel :
+    ¬ noSelfAccess none none ∧
+    openFact none ∧ Contingent noSelfAccess openFact none ∧
+    RestrictedPSR noSelfAccess none (fun _ => True) actualGround ∧
+    NoContingentMember noSelfAccess actualOnly none actualGround openFact ∧
+    AbstractInsufficiency (fun _ : Unit => True) actualGround openFact ∧
+    GroundFactivity none actualOnly actualGround ∧
+    ¬ (∃ G, actualGround G openFact ∧
+      ∃ g ∈ G, Box noSelfAccess (actualOnly g) none) := by
+  have hopen : openFact none := by intro h; cases h
+  have hacc : noSelfAccess none (some true) := by intro h; cases h
+  refine ⟨fun h => h rfl, hopen, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · exact ⟨⟨some true, hacc, by intro h; cases h⟩,
+      some false, (by intro h; cases h), fun h => h rfl⟩
+  · intro p _ hp _
+    exact ⟨Set.univ, hp, Set.mem_univ ()⟩
+  · intro G _ g _ hc
+    obtain ⟨v, hv, hg⟩ := hc.1
+    exact hv hg
+  · intro G hG
+    exact ⟨(), hG.2, True.intro⟩
+  · intro G p hG
+    exact ⟨hG.1, fun _ _ => rfl⟩
+  · rintro ⟨G, _, g, _, hbox⟩
+    have hbad := hbox (some true) hacc
+    cases hbad
+
+/-- Factivity is essential to the strengthened argument too. An impossible
+    concrete candidate satisfies PSR, P10* and P3*, and nothing necessary
+    exists. -/
+theorem dropping_factivity_strong_countermodel :
+    RestrictedPSR allAccess true allConcrete groundExists ∧
+    NoContingentMember allAccess impossibleHolds true groundExists sometimes ∧
+    AbstractInsufficiency (fun _ : Unit => True) groundExists sometimes ∧
+    ¬ GroundFactivity true impossibleHolds groundExists ∧
+    ¬ (∃ g : Unit, Box allAccess (impossibleHolds g) true) := by
+  refine ⟨groundExists_psr, ?_, ?_, ?_, ?_⟩
+  · intro G _ g _ hc
+    obtain ⟨v, _, hv⟩ := hc.1
+    exact hv
+  · intro G hG
+    exact ⟨(), hG.2, True.intro⟩
+  · intro hf
+    exact (hf Set.univ sometimes ⟨rfl, Set.mem_univ ()⟩).2 () (Set.mem_univ ())
+  · rintro ⟨g, hg⟩
+    exact hg true True.intro
+
+/-! ### Irreflexivity, dissectivity, production -/
+
+/-- The joint model of the strengthened premises is not irreflexive: there
+    the same collection grounds every actual truth, including the obtaining
+    of its own members. A stricter model is needed. -/
+theorem fullGround_not_irreflexive : ¬ GroundIrreflexive itemHolds fullGround := by
+  intro h
+  exact h {(true, false), (false, false)} (true, false) (Or.inl rfl)
+    ⟨Or.inl rfl, rfl⟩
+
+/-- Grounding indexed to evaluations. Only facts that fail at `false`, the
+    contingent ones, are grounded, and they are grounded by mathematics
+    together with a necessary concrete reality. -/
+def strictGroundAt (v : Bool) (G : Set (Bool × Bool)) (p : WProp Bool) : Prop :=
+  p v ∧ ¬ p false ∧ G = {(true, false), (false, false)}
+
+theorem strictGround_psr :
+    RestrictedPSR allAccess true allConcrete (strictGroundAt true) := by
+  intro p _ hp hc
+  obtain ⟨v, _, hnp⟩ := hc.2
+  have hpf : ¬ p false := by
+    cases v with
+    | false => exact hnp
+    | true => exact absurd hp hnp
+  exact ⟨{(true, false), (false, false)}, hp, hpf, rfl⟩
+
+theorem strictGround_factive : FactiveAt allAccess true itemHolds strictGroundAt := by
+  intro v _ G p hG
+  refine ⟨hG.1, fun g hg => ?_⟩
+  rw [hG.2.2] at hg
+  rcases hg with rfl | hg
+  · exact Or.inl rfl
+  · obtain rfl : g = (false, false) := hg
+    exact Or.inl rfl
+
+/-- In this model ultimacy holds for every grounded fact, not only for the
+    totality. -/
+theorem strictGround_members_necessary (p : WProp Bool) :
+    NoContingentMember allAccess itemHolds true (strictGroundAt true) p := by
+  intro G hG g hg
+  rw [hG.2.2] at hg
+  rcases hg with rfl | hg
+  · exact necessary_items_not_contingent true
+  · obtain rfl : g = (false, false) := hg
+    exact necessary_items_not_contingent false
+
+/-- The premises of `derived_argument` hold together with a contingent
+    world. Productive power is read as concreteness, so mathematics is inert
+    and still belongs to the ground. -/
+theorem derived_premises_satisfiable :
+    Box allAccess (fun _ : Bool => True) true ∧
+    worldFact true ∧ Contingent allAccess worldFact true ∧ allConcrete worldFact ∧
+    RestrictedPSR allAccess true allConcrete (strictGroundAt true) ∧
+    GroundIrreflexive itemHolds (strictGroundAt true) ∧
+    Dissective allAccess itemHolds true (strictGroundAt true) worldFact ∧
+    GroundFactivity true itemHolds (strictGroundAt true) ∧
+    NonNecessitatingGroundsProduce allAccess itemHolds true itemConcrete
+      (strictGroundAt true) := by
+  refine ⟨fun _ _ => True.intro, Or.inr rfl, worldFact_contingent, True.intro,
+    strictGround_psr, ?_, ?_, strictGround_factive true True.intro, ?_⟩
+  · intro G g hg hgr
+    obtain ⟨_, hnf, hGeq⟩ := hgr
+    rw [hGeq] at hg
+    rcases hg with rfl | hg
+    · exact hnf (Or.inl rfl)
+    · obtain rfl : g = (false, false) := hg
+      exact hnf (Or.inl rfl)
+  · intro G hG g hg hc
+    exact absurd hc (strictGround_members_necessary worldFact G hG g hg)
+  · intro G p hG _
+    rw [hG.2.2]
+    exact ⟨(true, false), Or.inl rfl, rfl⟩
+
+/-- The premises of `grounding_regress` and `no_level_settles_the_contrast`
+    hold together: the world is actually grounded, grounding is factive at
+    every evaluation, PSR covers every actual contingent fact including
+    grounding facts, and ultimacy holds at every level. The regress is
+    therefore consistent. It is not vicious, and it is not an explanation of
+    the contrast either. -/
+theorem indexed_premises_satisfiable :
+    strictGroundAt true {(true, false), (false, false)} worldFact ∧
+    FactiveAt allAccess true itemHolds strictGroundAt ∧
+    RestrictedPSR allAccess true allConcrete (strictGroundAt true) ∧
+    (∀ G p, allConcrete p → allConcrete (fun v => strictGroundAt v G p)) ∧
+    (∀ p, NoContingentMember allAccess itemHolds true (strictGroundAt true) p) := by
+  refine ⟨⟨Or.inr rfl, ?_, rfl⟩, strictGround_factive, strictGround_psr,
+    fun _ _ _ => True.intro, strictGround_members_necessary⟩
+  rintro (h | h) <;> cases h
+
+/-- Irreflexivity is essential. If a contingent reality may ground the
+    obtaining of itself, dissectivity holds, P10* fails, and no complete
+    ground has a necessary member. -/
+theorem dropping_irreflexivity_countermodel :
+    RestrictedPSR allAccess true allConcrete contingentGround ∧
+    Dissective allAccess itemHolds true contingentGround worldFact ∧
+    GroundFactivity true itemHolds contingentGround ∧
+    ¬ GroundIrreflexive itemHolds contingentGround ∧
+    ¬ NoContingentMember allAccess itemHolds true contingentGround worldFact ∧
+    ¬ (∃ G, contingentGround G worldFact ∧
+      ∃ g ∈ G, Box allAccess (itemHolds g) true) := by
+  obtain ⟨hPSR, _, hfact, hnstrong, hnone⟩ := dropping_strong_nc_countermodel
+  refine ⟨hPSR, ?_, hfact, ?_, hnstrong, hnone⟩
+  · intro G hG g hg _
+    rw [hG.2] at hg
+    obtain rfl : g = (true, true) := hg
+    exact ⟨Or.inr rfl, hG.2⟩
+  · intro hirr
+    exact hirr {(true, true)} (true, true) rfl ⟨Or.inr rfl, rfl⟩
+
+/-- Four evaluations and two independent contingent realities, one for each
+    coordinate. -/
+def pairAccess (_ _ : Bool × Bool) : Prop := True
+def pairHolds (g : Bool) (w : Bool × Bool) : Prop := (bif g then w.1 else w.2) = true
+def bothFact (w : Bool × Bool) : Prop := w.1 = true ∧ w.2 = true
+
+/-- The facts that fail whenever either reality is absent. -/
+def wholeOnly (p : WProp (Bool × Bool)) : Prop :=
+  ¬ p (true, false) ∧ ¬ p (false, true)
+
+/-- Both realities together ground the whole, and nothing grounds a part. -/
+def wholeOnlyGround (G : Set Bool) (p : WProp (Bool × Bool)) : Prop :=
+  p (true, true) ∧ wholeOnly p ∧ G = Set.univ
+
+/-- Dissectivity is essential. Two contingent realities ground their joint
+    obtaining, ground is irreflexive and factive, and no complete ground has
+    a necessary member. This is the regress theorist's picture: the whole is
+    explained by its members, and no member is explained by the whole. -/
+theorem dropping_dissectivity_countermodel :
+    bothFact (true, true) ∧ Contingent pairAccess bothFact (true, true) ∧
+    wholeOnly bothFact ∧
+    RestrictedPSR pairAccess (true, true) wholeOnly wholeOnlyGround ∧
+    GroundIrreflexive pairHolds wholeOnlyGround ∧
+    GroundFactivity (true, true) pairHolds wholeOnlyGround ∧
+    ¬ Dissective pairAccess pairHolds (true, true) wholeOnlyGround bothFact ∧
+    ¬ NoContingentMember pairAccess pairHolds (true, true) wholeOnlyGround bothFact ∧
+    ¬ (∃ G, wholeOnlyGround G bothFact ∧
+      ∃ g ∈ G, Box pairAccess (pairHolds g) (true, true)) := by
+  have hfirst : ¬ bothFact (true, false) := fun h => Bool.false_ne_true h.2
+  have hsecond : ¬ bothFact (false, true) := fun h => Bool.false_ne_true h.1
+  have hwhole : wholeOnly bothFact := ⟨hfirst, hsecond⟩
+  have hground : wholeOnlyGround Set.univ bothFact := ⟨⟨rfl, rfl⟩, hwhole, rfl⟩
+  have hcont : Contingent pairAccess (pairHolds true) (true, true) :=
+    ⟨⟨(true, true), True.intro, rfl⟩, (false, true), True.intro,
+      fun h => Bool.false_ne_true h⟩
+  refine ⟨⟨rfl, rfl⟩, ⟨⟨(true, true), True.intro, rfl, rfl⟩,
+    (true, false), True.intro, hfirst⟩, hwhole, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  · intro p hp hpw _
+    exact ⟨Set.univ, hpw, hp, rfl⟩
+  · intro G g _ hgr
+    cases g with
+    | true => exact hgr.2.1.1 rfl
+    | false => exact hgr.2.1.2 rfl
+  · intro G p hG
+    exact ⟨hG.1, fun g _ => by cases g <;> rfl⟩
+  · intro hdis
+    exact (hdis Set.univ hground true (Set.mem_univ true) hcont).2.1.1 rfl
+  · intro hstrong
+    exact hstrong Set.univ hground true (Set.mem_univ true) hcont
+  · rintro ⟨G, _, g, _, hbox⟩
+    cases g with
+    | true => exact Bool.false_ne_true (hbox (false, true) True.intro)
+    | false => exact Bool.false_ne_true (hbox (true, false) True.intro)
+
+/-- The production principle is essential. Without it, mathematics alone
+    grounds the world although it is necessary, unproductive, and does not
+    necessitate the world. -/
+theorem dropping_production_countermodel :
+    Contingent allAccess worldFact true ∧
+    Box allAccess (itemHolds (false, false)) true ∧
+    ¬ itemConcrete (false, false) ∧
+    mathOnlyGround {(false, false)} worldFact ∧
+    ¬ NonNecessitatingGroundsProduce allAccess itemHolds true itemConcrete
+      mathOnlyGround := by
+  have hG : mathOnlyGround {(false, false)} worldFact := ⟨Or.inr rfl, rfl⟩
+  refine ⟨worldFact_contingent, fun _ _ => Or.inl rfl, (by intro h; cases h), hG, ?_⟩
+  intro hPP
+  have hmembers : ∀ g ∈ ({(false, false)} : Set (Bool × Bool)),
+      Box allAccess (itemHolds g) true := by
+    intro g hg
+    obtain rfl : g = (false, false) := hg
+    exact fun _ _ => Or.inl rfl
+  obtain ⟨g, hg, hp⟩ := hPP {(false, false)} worldFact hG
+    (necessary_collection_does_not_necessitate hmembers worldFact_contingent)
+  obtain rfl : g = (false, false) := hg
+  cases hp
+
+/-- Inertness is essential. If mathematics counts as productive, the
+    production principle holds and mathematics alone grounds the world. -/
+theorem dropping_inertness_countermodel :
+    NonNecessitatingGroundsProduce allAccess itemHolds true (fun _ => True)
+      mathOnlyGround ∧
+    mathOnlyGround {(false, false)} worldFact ∧
+    ¬ (∀ g : Bool × Bool, (fun _ => True) g → itemConcrete g) := by
+  refine ⟨?_, ⟨Or.inr rfl, rfl⟩, ?_⟩
+  · intro G p hG _
+    rw [hG.2]
+    exact ⟨(false, false), rfl, True.intro⟩
+  · intro h
+    have hbad := h (false, false) True.intro
+    cases hbad
+
+end Models
+
 end ActualityGround
 
 /-! Kernel dependency audit. These commands expose foundational dependencies
@@ -756,3 +1348,32 @@ and any accidental admitted proof dependency in the actual compilation output. -
 #print axioms ActualityGround.Models.dropping_strong_nc_countermodel
 #print axioms ActualityGround.Models.dropping_PSR_strong_countermodel
 #print axioms ActualityGround.Models.strengthened_ground_need_not_be_personal
+#print axioms ActualityGround.ultimacy_of_irreflexive_dissective
+#print axioms ActualityGround.total_fact_dissective
+#print axioms ActualityGround.total_fact_ultimacy
+#print axioms ActualityGround.necessary_collection_does_not_necessitate
+#print axioms ActualityGround.inert_necessities_cannot_ground
+#print axioms ActualityGround.mathematics_alone_cannot_ground
+#print axioms ActualityGround.productive_member_of_ultimate_ground
+#print axioms ActualityGround.abstract_insufficiency_of_production
+#print axioms ActualityGround.necessary_productive_ground
+#print axioms ActualityGround.derived_argument
+#print axioms ActualityGround.necessitating_fact_is_contingent
+#print axioms ActualityGround.grounding_fact_necessitates
+#print axioms ActualityGround.grounding_fact_contingent
+#print axioms ActualityGround.ground_obtains_without_grounding
+#print axioms ActualityGround.grounding_level_contingent
+#print axioms ActualityGround.grounding_regress
+#print axioms ActualityGround.no_level_settles_the_contrast
+#print axioms ActualityGround.Models.dropping_self_access_countermodel
+#print axioms ActualityGround.Models.dropping_factivity_strong_countermodel
+#print axioms ActualityGround.Models.fullGround_not_irreflexive
+#print axioms ActualityGround.Models.strictGround_psr
+#print axioms ActualityGround.Models.strictGround_factive
+#print axioms ActualityGround.Models.strictGround_members_necessary
+#print axioms ActualityGround.Models.derived_premises_satisfiable
+#print axioms ActualityGround.Models.indexed_premises_satisfiable
+#print axioms ActualityGround.Models.dropping_irreflexivity_countermodel
+#print axioms ActualityGround.Models.dropping_dissectivity_countermodel
+#print axioms ActualityGround.Models.dropping_production_countermodel
+#print axioms ActualityGround.Models.dropping_inertness_countermodel

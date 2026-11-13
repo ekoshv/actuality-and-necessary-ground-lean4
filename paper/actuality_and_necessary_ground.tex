@@ -21,7 +21,7 @@
             urlcolor={blue!50!black},
             pdftitle={From Mathematical Possibility to Actuality},
             pdfauthor={A Philosophical Reconstruction},
-            pdfsubject={A Modal-Existential Argument for a Necessary Ground of Concrete Reality. Revised edition, 28 October 2026.},
+            pdfsubject={A Modal-Existential Argument for a Necessary Ground of Concrete Reality. Second revised edition, 13 November 2026.},
             pdfkeywords={actuality, contingency, necessary being, principle of sufficient reason, modal logic, Lean 4}]{hyperref}
 
 \pagestyle{fancy}
@@ -55,19 +55,19 @@
 \title{\textbf{From Mathematical Possibility to Actuality}\\[0.5em]
   \large A Modal-Existential Argument for a Necessary Ground of Concrete Reality}
 \author{A Philosophical Reconstruction}
-\date{20 September 2026\\[0.3em]\normalsize Revised edition, 28 October 2026}
+\date{20 September 2026\\[0.3em]\normalsize Revised edition, 28 October 2026\\Second revision, 13 November 2026}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-This article develops a conditional metaphysical argument from the distinction between mathematical possibility and concrete actuality. The central claim is not that mathematics is incomplete in a way that directly proves God, nor that a mathematical description of a universe is defective. Rather, if the relevant mathematical truths are necessary while the actuality of a particular world is contingent, necessary mathematical truths alone cannot metaphysically necessitate that world's actuality without collapsing its contingency into necessity. A further explanatory principle -- a restricted Principle of Sufficient Reason (PSR) for contingent actuality -- then motivates a necessary ground of actuality. This revised edition strengthens that step. Two premises made explicit here, ultimacy and abstract insufficiency, yield a necessarily existing \emph{concrete} member of the complete ground of contingent actuality, which no mathematical truth can supply. Under the same premises it is a theorem that this ground explains without necessitating, so the modal-collapse objection becomes a precise statement of the argument's cost rather than a refutation. The resulting view is placed in dialogue with Avicenna's Necessary Existent, Leibniz's PSR, Heidegger's question of Being, Gödel's incompleteness results, the block-universe conception of time, mathematical Platonism, modal realism, and the Mathematical Universe Hypothesis. The argument is presented as a rigorous metaphysical reconstruction, not as an unconditional mathematical proof. Its inferences, together with models showing that its premises are jointly consistent and individually needed, have been verified in the Lean~4 proof assistant. A separate section sets out the starting points the argument leaves open to someone who does not believe in a God-like being. Its decisive vulnerabilities are made explicit: the contingency of concrete reality, the explanatory PSR, the rejection of brute actuality, the ultimacy and abstract-insufficiency premises, and the further step from a necessary ground to the richer attributes traditionally associated with God.
+This article develops a conditional metaphysical argument from the distinction between mathematical possibility and concrete actuality. The central claim is not that mathematics is incomplete in a way that directly proves God, nor that a mathematical description of a universe is defective. Rather, if the relevant mathematical truths are necessary while the actuality of a particular world is contingent, necessary mathematical truths alone cannot metaphysically necessitate that world's actuality without collapsing its contingency into necessity. A further explanatory principle -- a restricted Principle of Sufficient Reason (PSR) for contingent actuality -- then motivates a necessary ground of actuality. This revised edition strengthens that step. Two premises made explicit here, ultimacy and abstract insufficiency, yield a necessarily existing \emph{concrete} member of the complete ground of contingent actuality, which no mathematical truth can supply. Under the same premises it is a theorem that this ground explains without necessitating, so the modal-collapse objection becomes a precise statement of the argument's cost rather than a refutation. A second revision derives both premises from finer ones: irreflexivity and dissectivity of ground, a production principle for grounds that do not necessitate, and the inertness of abstract entities. It also shows that the contrast between this world and any other stays unexplained at every level of grounding. The resulting view is placed in dialogue with Avicenna's Necessary Existent, Leibniz's PSR, Heidegger's question of Being, Gödel's incompleteness results, the block-universe conception of time, mathematical Platonism, modal realism, and the Mathematical Universe Hypothesis. The argument is presented as a rigorous metaphysical reconstruction, not as an unconditional mathematical proof. Its inferences, together with models showing that its premises are jointly consistent and individually needed, have been verified in the Lean~4 proof assistant. A separate section sets out the starting points the argument leaves open to someone who does not believe in a God-like being. Its decisive vulnerabilities are made explicit: the contingency of concrete reality, the explanatory PSR, the rejection of brute actuality, the ultimacy and abstract-insufficiency premises and the finer premises from which they are derived, the unexplained contrast between this world and another, and the further step from a necessary ground to the richer attributes traditionally associated with God.
 \end{abstract}
 
 \begin{center}
 \begin{minipage}{0.9\linewidth}
-\small\textbf{Note on this edition.} This edition revises the version of 20 September 2026. Section~\ref{sec:strengthened} is new: it identifies three weaknesses in the first edition's Proposition~\ref{prop:ground} and repairs them. Two further sections are new: Section~\ref{sec:nontheist} sets out starting points for someone who does not believe in a God-like being, and Section~\ref{sec:formal} reports the machine-checked formalization. Sections~\ref{sec:modalcore}, \ref{sec:leibniz}, \ref{sec:objections}, \ref{sec:steps}, \ref{sec:scope}, and~\ref{sec:conclusion} have additions that refer to the new results. The first edition's argument is preserved in Sections~\ref{sec:modalcore}--\ref{sec:fromcore} and in the twelve steps of Section~\ref{sec:steps}.
+\small\textbf{Note on this edition.} This edition revises the version of 20 September 2026. Section~\ref{sec:strengthened} is new: it identifies three weaknesses in the first edition's Proposition~\ref{prop:ground} and repairs them. Two further sections are new: Section~\ref{sec:nontheist} sets out starting points for someone who does not believe in a God-like being, and Section~\ref{sec:formal} reports the machine-checked formalization. Sections~\ref{sec:modalcore}, \ref{sec:leibniz}, \ref{sec:objections}, \ref{sec:steps}, \ref{sec:scope}, and~\ref{sec:conclusion} have additions that refer to the new results. The first edition's argument is preserved in Sections~\ref{sec:modalcore}--\ref{sec:fromcore} and in the twelve steps of Section~\ref{sec:steps}. The second revision of 13 November 2026 adds Section~\ref{sec:derived}, which derives ultimacy and abstract insufficiency from finer premises and treats the grounding fact itself, and it extends Sections~\ref{sec:objections}, \ref{sec:steps}, \ref{sec:scope}, \ref{sec:nontheist}, \ref{sec:formal}, and~\ref{sec:conclusion} accordingly.
 \end{minipage}
 \end{center}
 
@@ -331,6 +331,150 @@ A strengthened premise set is valuable only if it is consistent, and each new pr
 \end{itemize}
 The strengthened conclusion is neutral between theistic and naturalistic readings. A necessarily existing initial physical state whose later evolution is objectively chancy, as in Oppy's naturalism~\cite{oppy13}, satisfies it. Uniqueness, personhood, goodness, and identification with God are not established.
 
+\clearpage
+\section{Deriving the Strengthened Premises}
+\label{sec:derived}
+
+\subsection{What the strengthened argument leaves open}
+\label{sec:open}
+
+Proposition~\ref{prop:concrete} is valid and its premises are consistent. Three criticisms remain.
+
+First, ultimacy and abstract insufficiency stand close to the conclusion they support. Ultimacy says that the ground of the totality has no contingent member. Abstract insufficiency says that it has a concrete member. The conclusion says that it has a non-contingent concrete member. The premises would be better supported if they followed from principles that hold independently of this argument.
+
+Second, the modal core does not distinguish mathematics from the necessary concrete ground. Proposition~\ref{prop:nonselection} shows that mathematics cannot necessitate a contingent world. Corollary~\ref{cor:nonnec} shows that the necessary concrete ground cannot necessitate it either. On the one test proved so far, the two are on a par, and nothing except abstract insufficiency excludes mathematics.
+
+Third, the grounding relation has been given no structure, and the fact that $G$ grounds $C$ has not itself been treated as a fact. If $C$ is contingent and grounding is factive, that fact is contingent too, and PSR-A appears to apply to it.
+
+This section answers the first two criticisms by deriving ultimacy and abstract insufficiency from finer premises. It answers the third by proving what follows when the grounding fact is brought inside the theory.
+
+\subsection{Ultimacy from irreflexivity and dissectivity}
+
+\begin{definition}[Irreflexivity]\label{def:irr}
+No collection of realities grounds the actuality of one of its own members.
+\end{definition}
+
+Irreflexivity is a standard structural feature of ground~\cite{fine}. For a collective ground it presupposes that every member contributes, so that a ground containing $g$ would use $g$ to explain $g$.
+
+\begin{definition}[Dissectivity]\label{def:dis}
+If $G$ is a complete ground of the totality $C$ and $g$ is a contingent member of $G$, then $G$ also grounds the actuality of $g$.
+\end{definition}
+
+Dissectivity is the first edition's rationale for P10, stated as a premise. The actuality of a contingent $g$ is among the facts that $C$ comprises, and a complete ground of a whole is taken to ground what the whole comprises.
+
+\begin{proposition}[Ultimacy Derived]\label{prop:ultimacy}
+Irreflexivity and dissectivity imply ultimacy.
+\end{proposition}
+
+\begin{proof}
+Let $G$ be a complete ground of $C$ and suppose some member $g$ of $G$ were contingent. By dissectivity, $G$ grounds the actuality of $g$. By irreflexivity, it does not.
+\end{proof}
+
+When $C$ is taken as the conjunction of the actual contingent facts, dissectivity itself follows from two things: a complete ground of a conjunction grounds each conjunct, and the members of an actual ground obtain. Ultimacy is then a theorem about that conjunction.
+
+The derivation locates the disagreement more exactly than ultimacy did. Someone who holds that the universe explains itself rejects irreflexivity. A regress theorist rejects dissectivity: on that view each member of the series is explained by other members, the whole is explained by its members, and no member is explained by the whole.
+
+\subsection{Abstract insufficiency from production and inertness}
+
+By Corollary~\ref{cor:nonnec}, the ultimate ground does not necessitate what it grounds. On the view that a full ground necessitates what it grounds, a contingent totality therefore has no ground at all under ultimacy, and PSR-A fails. The argument requires the contrary view, on which some full grounds do not necessitate. Leuenberger and Skiles each describe the necessitarian view as the orthodoxy about ground and argue against it~\cite{leuenberger,skiles}. That raises a question the earlier sections did not ask: what can explain a fact without entailing it?
+
+\begin{definition}[Production principle]\label{def:pp}
+If a complete ground does not necessitate what it grounds, then at least one of its members has productive power: it can bring about one among several outcomes that it leaves open.
+\end{definition}
+
+Chancy physical processes and free agents are the standard candidates for such power. The principle does not choose between them.
+
+\begin{definition}[Inertness]\label{def:inert}
+Abstract entities have no productive power.
+\end{definition}
+
+Inertness is part of the standard characterization of abstract objects as causally inert~\cite{linnebo,balaguer}.
+
+\begin{proposition}[Mathematics Alone Cannot Ground Contingent Actuality]\label{prop:mathalone}
+Assume that the relevant mathematical realities are necessary, that $C$ is contingent, the production principle, and inertness. Then no collection consisting only of mathematical realities is a complete ground of $C$.
+\end{proposition}
+
+\begin{proof}
+Suppose $G$ were such a ground. Since $C$ is contingent, there is an accessible world $v$ at which $C$ fails. Every member of $G$ is necessary and so obtains at $v$. Hence $G$ does not necessitate $C$. By the production principle, some member of $G$ has productive power. By inertness, no mathematical reality has it.
+\end{proof}
+
+The proposition uses neither PSR-A, nor ultimacy, nor abstract insufficiency. Its premises are P2 and P4, which the modal core already needed, and two claims about explanation. The modal core now does the work that Section~\ref{sec:modalcore} only suggested. Mathematics cannot necessitate a contingent world, and since it is inert it has no other way to explain one. The necessary concrete ground differs from mathematics at exactly this point: it cannot necessitate the world either, but nothing prevents it from being productive.
+
+\begin{proposition}[Abstract Insufficiency Derived]\label{prop:aiderived}
+Assume that $C$ is contingent, ultimacy, factivity, self-access, the production principle, and inertness. Then every complete ground of $C$ has a concrete member.
+\end{proposition}
+
+\begin{proof}
+By Corollary~\ref{cor:nonnec}, a complete ground of $C$ does not necessitate $C$. By the production principle it has a productive member, which by inertness is not abstract.
+\end{proof}
+
+\begin{proposition}[Necessary Productive Ground]\label{prop:productive}
+Assume that $C$ is actual and contingent, PSR-A, irreflexivity, dissectivity, factivity, self-access, the production principle, and inertness. Then some complete ground of $C$ has a member that is productive, concrete, and necessarily existing, and that ground does not necessitate $C$.
+\end{proposition}
+
+\begin{proof}
+Ultimacy holds by Proposition~\ref{prop:ultimacy}. PSR-A supplies a complete ground $G$, and the proof of Proposition~\ref{prop:aiderived} supplies a productive, concrete member $g$ of $G$. As in Proposition~\ref{prop:concrete}, $g$ is non-contingent by ultimacy and actual by factivity, hence necessary. Non-necessitation is Corollary~\ref{cor:nonnec}.
+\end{proof}
+
+The conclusion is stronger than that of Proposition~\ref{prop:concrete} in one respect. Section~\ref{obj:god} listed causal power among the attributes that needed a further argument. Under the production principle it follows. Productive power is not intellect or will, however: an objectively chancy physical state has it.
+
+With $F$ for factivity and self-access, the derived conditional is
+\begin{multline*}
+  (P4 \land P7 \land \mathsf{Irr} \land \mathsf{Dis} \land \mathsf{Prod} \land \mathsf{Inert} \land F) \rightarrow \\
+  \exists G\; \exists g \in G\;\bigl(G \grounds C \land \mathsf{Productive}(g) \land \mathsf{Concrete}(g) \\
+  \land\; \Box\,\mathsf{Exists}(g) \land \neg\Box(G \to C)\bigr).
+\end{multline*}
+
+\subsection{The grounding fact}
+\label{sec:link}
+
+Let grounding be indexed to worlds, so that ``$G$ grounds $C$'' is a proposition that holds at some worlds and fails at others, and let factivity hold at every accessible world. Self-access is assumed throughout.
+
+\begin{proposition}[Van Inwagen's Lemma]\label{prop:vi}
+If a fact $q$ actually obtains and necessitates a contingent fact $C$, then $q$ is itself contingent.
+\end{proposition}
+
+\begin{proof}
+$q$ obtains at the actual world, which is accessible by self-access. At an accessible world where $C$ fails, $q$ fails as well, since $q$ necessitates $C$.
+\end{proof}
+
+\begin{proposition}[The Grounding Fact Is Contingent]\label{prop:link}
+If $C$ is contingent and $G$ actually grounds $C$, then the fact that $G$ grounds $C$ is contingent, whatever $G$ is.
+\end{proposition}
+
+\begin{proof}
+By factivity, the fact that $G$ grounds $C$ necessitates $C$. Apply Proposition~\ref{prop:vi}.
+\end{proof}
+
+\begin{corollary}[Ground Without Grounding]\label{cor:idle}
+Assume also ultimacy. Then there is an accessible world at which every member of $G$ exists and $G$ does not ground $C$.
+\end{corollary}
+
+The difference between that world and the actual one lies wholly in the grounding fact. Nothing in the ground differs. Proposition~\ref{prop:vi} generalizes the point: anything that settles why $C$ obtains rather than fails, such as a free choice or the outcome of a chancy process, necessitates $C$ and is therefore contingent. By ultimacy it lies outside the ultimate ground. It is then part of $C$, the very thing that was to be explained.
+
+The grounding fact is an actual contingent fact. If PSR-A applies to it, the question returns.
+
+\begin{proposition}[Regress]\label{prop:regress}
+Assume that PSR-A applies to grounding facts. Then there is a hierarchy consisting of $C$, the fact that some $G_0$ grounds $C$, the fact that some $G_1$ grounds that fact, and so on, in which every fact is actual, contingent, and grounded. If ultimacy holds at every level, then at every level the ground obtains at an accessible world where the fact it grounds fails.
+\end{proposition}
+
+The regress is consistent: Section~\ref{sec:derivedmodels} reports a model. It need not be vicious, since the same ground may serve at every level. But it never yields a contrastive explanation. The alternative is to exempt grounding facts from PSR-A, which leaves the link between the ground and the world brute.
+
+\paragraph{Consequence for PSR-A.} The reply to Objection~1 in Section~\ref{sec:objections} motivates PSR-A by the thought that we seek explanations for contingent states because they could have been otherwise. That motivation is contrastive, and by Proposition~\ref{prop:regress} the argument cannot satisfy it at any level. What PSR-A delivers here is an explanation of the fact \emph{that} contingent actuality obtains: it comes from a necessary productive reality. It delivers no explanation of why this actuality obtains rather than another. The dilemma of Proposition~\ref{prop:dilemma} should be read accordingly. The brute-fact option leaves both the existence of contingent actuality and the contrast unexplained. The necessary-ground option explains the first and leaves the second unexplained. A defender of PSR-A therefore needs a motivation that is not contrastive, for example that contingent existence calls for a source even where no reason selects among the alternatives. Whether such a motivation is adequate is an open question, and this article does not settle it.
+
+\subsection{Consistency and independence}
+\label{sec:derivedmodels}
+
+The results of this section have been checked in the same way as those of Section~\ref{sec:strengthened} (Section~\ref{sec:formal}).
+\begin{itemize}
+  \item All the premises of Proposition~\ref{prop:productive} hold in a model in which $C$ is contingent. The joint model of Section~\ref{sec:consistency} is not irreflexive, because in it one collection grounds every actual truth, including the actuality of its own members. A stricter model replaces it here: only contingent truths are grounded, by mathematics together with a necessary concrete reality.
+  \item The premises of Proposition~\ref{prop:regress}, including ultimacy at every level, hold in that same model.
+  \item Without irreflexivity, a contingent reality grounds its own actuality, and no complete ground has a necessary member.
+  \item Without dissectivity, two contingent realities ground their joint actuality, ground is irreflexive, and no complete ground has a necessary member.
+  \item Without the production principle, mathematics alone grounds the world. Without inertness, mathematics counts as productive and again grounds the world alone.
+  \item Factivity and self-access are each needed for Proposition~\ref{prop:concrete}. Without factivity the concrete member may be impossible. Without self-access it may obtain at the actual world and at no accessible one.
+\end{itemize}
+
 \section{Avicenna: Necessary Existence and Contingent Being}
 
 Avicenna's metaphysics offers a particularly close historical analogue. In \emph{The Metaphysics of The Healing}, he distinguishes what is necessary in itself from what is possible (contingent) in itself. A contingent existent does not contain within its essence the sufficient explanation of its existence; if actual, its existence is from another. His argument aims ultimately at the Necessary Existent, whose existence is not received from another~\cite{avicenna,adamson,chignell}.
@@ -460,7 +604,7 @@ The total concrete reality is a brute fact. It has no further explanation.
 
 This position is logically available. Contemporary discussions of brute facts explicitly connect them to denials or restrictions of PSR~\cite{mulligan}. Russell's famous stance in his debate with Copleston is often taken as a paradigmatic refusal to demand an explanation of the whole universe. Humean and anti-rationalist traditions likewise resist unrestricted explanatory demands.
 
-\paragraph{Reply.} The argument cannot derive a contradiction from brute actuality using pure logic alone. Its response must therefore be abductive or methodological: accepting brute actuality stops explanation exactly at the point where the most comprehensive contingent fact appears. A defender of PSR-A argues that this is theoretically costly, especially when we ordinarily seek explanations for contingent states precisely because they could have been otherwise. But this is a philosophical commitment, not a theorem. Proposition~\ref{prop:dilemma} states the alternative exactly: under ultimacy and abstract insufficiency, the options are a brute contingent totality and a necessarily existing concrete reality.
+\paragraph{Reply.} The argument cannot derive a contradiction from brute actuality using pure logic alone. Its response must therefore be abductive or methodological: accepting brute actuality stops explanation exactly at the point where the most comprehensive contingent fact appears. A defender of PSR-A argues that this is theoretically costly, especially when we ordinarily seek explanations for contingent states precisely because they could have been otherwise. But this is a philosophical commitment, not a theorem. Proposition~\ref{prop:dilemma} states the alternative exactly: under ultimacy and abstract insufficiency, the options are a brute contingent totality and a necessarily existing concrete reality. Section~\ref{sec:link} qualifies this reply. The appeal to what could have been otherwise is contrastive, and no ground the argument reaches explains the contrast. The advantage of the second option over the first is that it explains the existence of contingent actuality, not that it explains why this actuality obtains.
 
 \subsection{Objection 2: PSR causes modal collapse}
 \label{obj:collapse}
@@ -553,6 +697,8 @@ With $F$ for factivity and self-access, the strengthened conditional is
 \]
 The sites of disagreement are now the distinction P3 and its strengthening P3*, contingency, PSR-A, and ultimacy. The acceptance of a non-necessitating ultimate explanation is not a further optional premise: by Corollary~\ref{cor:nonnec}, it follows from contingency, PSR-A, ultimacy, and $F$.
 
+Section~\ref{sec:derived} goes one step further back. P10* follows from irreflexivity and dissectivity, and P3* follows from the production principle and inertness, so neither needs to be assumed. The sites of disagreement are then contingency, PSR-A, and those four premises.
+
 \section{What the Argument Does and Does Not Establish}
 \label{sec:scope}
 
@@ -571,6 +717,8 @@ A Heideggerian warning against conceiving the ground as merely another intraworl
 A necessarily existing concrete ground, if ultimacy and abstract insufficiency are also accepted & That this ground is unique, or that it is not physical \\
 That such a ground explains contingent actuality without necessitating it & Why this world obtains rather than another \\
 A sharp dilemma between a brute contingent totality and a necessary concrete reality & That PSR-A is true, and so which side of the dilemma holds \\
+That mathematics alone cannot ground contingent actuality, if the production principle and inertness are accepted & That the production principle is true \\
+That the necessary concrete ground has productive power, under the same two premises & That this power is intellect or will rather than chance \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -586,7 +734,7 @@ A non-theist may accept every premise of the strengthened argument: contingency,
 
 The necessary concrete reality can therefore be read naturalistically. On Oppy's proposal~\cite{oppy13}, it is a necessarily existing initial physical state whose later evolution is objectively chancy. Chance, rather than choice, then supplies the non-necessitation that Corollary~\ref{cor:nonnec} forces.
 
-This reading has two costs. It must hold that some physical reality could not have failed to exist, although the totality of contingent concrete facts remains contingent. And, by Proposition~\ref{prop:open}, the ultimate explanation does not say why this world obtains rather than another. A theist who appeals to free creation bears the second cost as well: by ultimacy, a contingent choice cannot itself belong to the ultimate ground.
+This reading has two costs. It must hold that some physical reality could not have failed to exist, although the totality of contingent concrete facts remains contingent. And, by Proposition~\ref{prop:open}, the ultimate explanation does not say why this world obtains rather than another. Under the production principle of Section~\ref{sec:derived}, the necessary physical reality must also have productive power, which an objectively chancy state has. A theist who appeals to free creation bears the second cost as well: by ultimacy, a contingent choice cannot itself belong to the ultimate ground.
 
 \subsection{Rejecting a premise}
 
@@ -599,8 +747,8 @@ Alternatively, a non-theist may reject one premise. Each option below is consist
 \textbf{Starting point} & \textbf{Premise rejected} & \textbf{What one then holds} \\
 \midrule
 Brute fact & PSR-A for the totality & The universe as a whole has no explanation; explanation stops at the most comprehensive contingent fact. \\
-Self-grounding universe & Ultimacy (P10*) & The whole is explained by its own members, in a regress or a closed structure. \\
-Mathematical naturalism & Abstract insufficiency (P3*), or P3 & Mathematics gives rise to physical reality, or simply is it; the abstract/concrete distinction must then be rebuilt. \\
+Self-grounding universe & Ultimacy (P10*), by rejecting irreflexivity or dissectivity & The whole is explained by its own members: in a closed structure if irreflexivity is rejected, in a regress if dissectivity is. \\
+Mathematical naturalism & Abstract insufficiency (P3*), by rejecting production or inertness; or P3 & Mathematics gives rise to physical reality, or simply is it; the abstract/concrete distinction must then be rebuilt. \\
 Plenitude & P3 & Every possible world is concrete, and ``actual'' only marks our own; why there is a plurality of worlds at all remains open. \\
 Necessitarianism & Contingency (P4) & The universe could not have been otherwise; no alternative total reality is possible. \\
 \bottomrule
@@ -623,9 +771,9 @@ The map is symmetric. A theist starts from the same theorems and still has to ar
 \section{Formal Verification}
 \label{sec:formal}
 
-The inferences of Sections~\ref{sec:modalcore}--\ref{sec:strengthened} have been checked in the Lean~4 proof assistant~\cite{lean4} with the mathlib library~\cite{mathlib}. The development, its audit, and the record of the verification run are available at \url{https://github.com/ekoshv/actuality-and-necessary-ground-lean4}.
+The inferences of Sections~\ref{sec:modalcore}--\ref{sec:derived} have been checked in the Lean~4 proof assistant~\cite{lean4} with the mathlib library~\cite{mathlib}. The development, its audit, and the record of the verification run are available at \url{https://github.com/ekoshv/actuality-and-necessary-ground-lean4}.
 
-\paragraph{Results.} Table~\ref{tab:lean} lists the Lean theorem that verifies each main result.
+\paragraph{Results.} Table~\ref{tab:lean} lists the Lean theorem that verifies each main result of Sections~\ref{sec:modalcore}--\ref{sec:strengthened} and~\ref{sec:nontheist}, and Table~\ref{tab:lean2} does the same for Section~\ref{sec:derived}.
 
 \begin{table}[H]
 \centering
@@ -656,9 +804,41 @@ The necessary ground need not be personal (Section~\ref{sec:nontheist}) & \lean{
 \label{tab:lean}
 \end{table}
 
-\paragraph{Modelling.} Propositions are functions from evaluations to propositions, and necessity and possibility are interpreted over an arbitrary accessibility relation; Proposition~\ref{prop:nonselection} needs no S5 assumption. Candidate grounds form a separate domain, a ground is a set of candidates and may be infinite, and the grounding relation is left uninterpreted. Every philosophical premise, including PSR-A, premise (iii), ultimacy, abstract insufficiency, factivity, and self-access, enters as a hypothesis of the theorems, never as an axiom. The formal theorems therefore verify conditional implications; they do not prove the premises.
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}L{0.38\linewidth}L{0.58\linewidth}@{}}
+\toprule
+\textbf{Result} & \textbf{Lean theorem} \\
+\midrule
+Proposition~\ref{prop:ultimacy} & \lean{ultimacy_of_irreflexive_dissective} \\
+Ultimacy for the conjunction of contingent facts & \lean{total_fact_ultimacy} \\
+Proposition~\ref{prop:mathalone} & \lean{mathematics_alone_cannot_ground} \\
+Proposition~\ref{prop:aiderived} & \lean{abstract_insufficiency_of_production} \\
+Proposition~\ref{prop:productive} & \lean{derived_argument} \\
+Proposition~\ref{prop:vi} & \lean{necessitating_fact_is_contingent} \\
+Proposition~\ref{prop:link} & \lean{grounding_fact_contingent} \\
+Corollary~\ref{cor:idle} & \lean{ground_obtains_without_grounding} \\
+Proposition~\ref{prop:regress} & \lean{grounding_regress}, \lean{no_level_settles_the_contrast} \\
+Joint model of the derived premises & \lean{Models.derived_premises_satisfiable} \\
+Joint model of the regress premises & \lean{Models.indexed_premises_satisfiable} \\
+The earlier joint model is not irreflexive & \lean{Models.fullGround_not_irreflexive} \\
+Countermodel without irreflexivity & \lean{Models.dropping_irreflexivity_countermodel} \\
+Countermodel without dissectivity & \lean{Models.dropping_dissectivity_countermodel} \\
+Countermodel without the production principle & \lean{Models.dropping_production_countermodel} \\
+Countermodel without inertness & \lean{Models.dropping_inertness_countermodel} \\
+Countermodel without self-access & \lean{Models.dropping_self_access_countermodel} \\
+Countermodel without factivity & \lean{Models.dropping_factivity_strong_countermodel} \\
+\bottomrule
+\end{tabular}
+\caption{Results of Section~\ref{sec:derived} and the Lean theorems that verify them.}
+\label{tab:lean2}
+\end{table}
 
-\paragraph{Foundations.} A separate audit inspects all 40 theorems of the development. Twenty-nine depend on no axioms, and eleven use only Lean's standard \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}. There are no added axioms and no admitted proofs. The verification run of 28 October 2026 used Lean 4.19.0 and mathlib at commit \lean{c44e0c8} (tag \lean{v4.19.0}); the repository records the exact compiler identity and the hashes of all sources, including the first edition of this article.
+\paragraph{Modelling.} Propositions are functions from evaluations to propositions, and necessity and possibility are interpreted over an arbitrary accessibility relation; Proposition~\ref{prop:nonselection} needs no S5 assumption. Candidate grounds form a separate domain, a ground is a set of candidates and may be infinite, and the grounding relation is left uninterpreted. Every philosophical premise, including PSR-A, premise (iii), ultimacy, abstract insufficiency, irreflexivity, dissectivity, the production principle, inertness, factivity, and self-access, enters as a hypothesis of the theorems, never as an axiom. For Section~\ref{sec:link}, grounding is indexed to evaluations, so that the grounding fact is itself a proposition. Propositions are individuated by the evaluations at which they hold, so the levels of the regress in Proposition~\ref{prop:regress} need not be distinct facts. The formal theorems therefore verify conditional implications; they do not prove the premises.
+
+\paragraph{Foundations.} A separate audit inspects all 69 theorems of the development, together with one recursion lemma that Lean generates for an inductive definition. Of the 69, fifty-two depend on no axioms, and seventeen use only Lean's standard \lean{propext}, \lean{Classical.choice}, and \lean{Quot.sound}. There are no added axioms and no admitted proofs. The verification run of 13 November 2026 used Lean 4.19.0 and mathlib at commit \lean{c44e0c8} (tag \lean{v4.19.0}); the repository records the exact compiler identity and the hashes of all sources, including the first edition of this article.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -671,9 +851,11 @@ A restricted Principle of Sufficient Reason then turns that gap into a contingen
 
 The strengthened argument makes that sense precise. If no member of the ground of the contingent totality may itself be contingent, and abstract entities alone cannot ground concrete actuality, then the ground includes a necessarily existing concrete reality, which no mathematical truth can be. The same premises prove that this reality grounds the world without necessitating it. Van Inwagen's dilemma is thereby converted from a refutation into the argument's stated cost: the ultimate explanation of a contingent world cannot be necessitating, and it cannot by itself say why this world exists rather than another.
 
+The second revision removes two of the argument's assumptions and adds one admission. Ultimacy follows from the irreflexivity of ground together with the claim that a ground of the whole grounds its own contingent members. Abstract insufficiency follows from the claim that a ground which does not necessitate must produce, together with the inertness of abstract entities. The modal core then does real work: because mathematics cannot necessitate a contingent world, it would have to produce one, and it cannot. The admission is that the contrast between this world and another is not explained at any level of grounding. The argument offers an explanation of the existence of contingent actuality, and none of its selection.
+
 Avicenna supplies the metaphysics of necessary versus contingent existence. Leibniz supplies the demand for a sufficient reason of the total contingent order. Heidegger supplies a caution: the ultimate issue is not adequately captured by picturing a supreme object alongside other objects. Gödel supplies a different caution: mathematical structure is not identical with exhaustive derivability inside one formal system. The block-universe picture then allows the grounding relation to be timeless rather than a first event before time.
 
-The remaining philosophical choice is sharp but unresolved. One may reject the argument by accepting brute actuality, by declaring the whole concrete reality necessary, by identifying mathematical and concrete existence, by adopting a plenitude of concrete worlds, by letting the contingent totality ground itself, or by holding that abstract structures give rise to concrete reality. Or one may accept that contingent actuality has a necessarily existing concrete ground that explains it without necessitating it. Section~\ref{sec:nontheist} sets out these options for someone who does not believe in a God-like being. The argument does not force that choice by logic alone. What it does is expose exactly where the choice occurs and what each alternative must bear.
+The remaining philosophical choice is sharp but unresolved. One may reject the argument by accepting brute actuality, by declaring the whole concrete reality necessary, by identifying mathematical and concrete existence, by adopting a plenitude of concrete worlds, by letting the contingent totality ground itself, or by holding that abstract structures give rise to concrete reality. Section~\ref{sec:derived} divides the last two: the totality may ground itself in a closed structure or in a regress, and abstract structures may give rise to concrete reality by necessitating it or by producing it. Or one may accept that contingent actuality has a necessarily existing concrete ground that explains it without necessitating it. Section~\ref{sec:nontheist} sets out these options for someone who does not believe in a God-like being. The argument does not force that choice by logic alone. What it does is expose exactly where the choice occurs and what each alternative must bear.
 
 The central question can therefore be stated in its most compact form:
 \begin{center}
@@ -742,6 +924,12 @@ van Inwagen, Peter. \emph{An Essay on Free Will}. Oxford: Clarendon Press, 1983.
 
 \bibitem{oppy13}
 Oppy, Graham. ``Ultimate Naturalistic Causal Explanations.'' In \emph{The Puzzle of Existence: Why Is There Something Rather Than Nothing?}, edited by Tyron Goldschmidt, 46--63. New York: Routledge, 2013.
+
+\bibitem{leuenberger}
+Leuenberger, Stephan. ``Grounding and Necessity.'' \emph{Inquiry} 57, no.~2 (2014): 151--174. \url{https://doi.org/10.1080/0020174X.2013.855654}.
+
+\bibitem{skiles}
+Skiles, Alexander. ``Against Grounding Necessitarianism.'' \emph{Erkenntnis} 80, no.~4 (2015): 717--751. \url{https://doi.org/10.1007/s10670-014-9669-y}.
 
 \bibitem{lean4}
 de Moura, Leonardo, and Sebastian Ullrich. ``The Lean 4 Theorem Prover and Programming Language.'' In \emph{Automated Deduction -- CADE 28}, edited by André Platzer and Geoff Sutcliffe, 625--635. Lecture Notes in Computer Science 12699. Cham: Springer, 2021. \url{https://doi.org/10.1007/978-3-030-79876-5_37}.
